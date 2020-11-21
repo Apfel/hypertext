@@ -1,2 +1,2 @@
-*.h c
-*.rc c
+*.h     text diff=c
+*.rc    text diff=c
