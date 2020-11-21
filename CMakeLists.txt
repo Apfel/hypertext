@@ -70,7 +70,7 @@ if(BUILD_TESTS)
 
     project(hypertext_test_response_creation C)
     add_executable(hypertext_test_response_creation
-        ${CMAKE_CURRENT_LIST_DIR}/Tests/creation/Response.c
+        ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Response.c
         ${ADDITIONAL_SOURCES}
     )
     target_link_libraries(hypertext_test_response_creation PUBLIC hypertext)
