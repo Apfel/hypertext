@@ -35,7 +35,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
     instance->method = method;
     
     instance->path = calloc(path_length + 1, sizeof(char));
-    memcpy_s(instance->path, path_length * sizeof(char), path, path_length * sizeof(char));
+    memcpy(instance->path, path, path_length * sizeof(char));
 
     if (field_count != 0)
     {
@@ -43,7 +43,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
 
         instance->field_count = field_count;
         instance->fields = calloc(field_count, sizeof(hypertext_Header_Field));
-        memcpy_s(instance->fields, sizeof(hypertext_Header_Field) * field_count, fields, sizeof(hypertext_Header_Field) * field_count);
+        memcpy(instance->fields, fields, sizeof(hypertext_Header_Field) * field_count);
     }
 
     if (body_length != 0)
@@ -51,7 +51,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
         if (body == NULL) return hypertext_Result_Invalid_Parameters;
 
         instance->body = calloc(body_length + 1, sizeof(char));
-        memcpy_s(instance->body, body_length * sizeof(char), body, body_length * sizeof(char));
+        memcpy(instance->body, body, body_length * sizeof(char));
     }
 
     return hypertext_Result_Success;
@@ -70,7 +70,7 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, h
 
         instance->field_count = field_count;
         instance->fields = calloc(field_count, sizeof(hypertext_Header_Field));
-        memcpy_s(instance->fields, sizeof(hypertext_Header_Field) * field_count, fields, sizeof(hypertext_Header_Field) * field_count);
+        memcpy(instance->fields, fields, sizeof(hypertext_Header_Field) * field_count);
     }
 
     if (body_length != 0)
@@ -78,7 +78,7 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, h
         if (body == NULL) return hypertext_Result_Invalid_Parameters;
 
         instance->body = calloc(body_length + 1, sizeof(char));
-        memcpy_s(instance->body, body_length * sizeof(char), body, body_length * sizeof(char));
+        memcpy(instance->body, body, body_length * sizeof(char));
     }
 
     return hypertext_Result_Success;

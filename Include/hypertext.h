@@ -31,20 +31,15 @@ extern "C"
 #endif
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #if defined(_WIN32)
 #define hypertext_EXPORT __declspec(dllexport)
-#define hypertext_API __cdecl
 #elif defined(__GNUC__) || defined(COMPILER_GCC) || defined(__APPLE__)
 #define hypertext_EXPORT __attribute__((visibility("default")))
-#define hypertext_API __cdecl
 #else
 #error "Your compiler and/or platform might not be supported."
-#endif
-
-#ifndef _MSC_VER
-#define __STDC_WANT_LIB_EXT1__ 1
 #endif
 
 /// A normal header field.
@@ -168,10 +163,10 @@ enum hypertext_HTTP_Version
  * 
  * \return Returns NULL if an error occurred; otherwise it'll be a usable instance.
  */
-hypertext_EXPORT hypertext_Instance* hypertext_API hypertext_New();
+hypertext_EXPORT hypertext_Instance* hypertext_New();
 
 /// Destroys the instance's content. Useful in order to re-use a cleaned instance for a new request or response.
-hypertext_EXPORT void hypertext_API hypertext_Destroy(hypertext_Instance* instance);
+hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
 
 /** \brief Initializes the instance as a new request.
  * 
@@ -190,7 +185,7 @@ hypertext_EXPORT void hypertext_API hypertext_Destroy(hypertext_Instance* instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Initializes the instance as a new request.
  * 
@@ -207,7 +202,7 @@ hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Request(hypertext_Instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Parses a raw request coming from a UTF-8 character array.
  * 
@@ -222,7 +217,7 @@ hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Response(hypertext_Insta
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Request(hypertext_Instance* instance, const char* input, size_t length);
+hypertext_EXPORT uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Parses a raw response coming from a UTF-8 character array.
  * 
@@ -237,7 +232,7 @@ hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Request(hypertext_Instanc
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length);
+hypertext_EXPORT uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Takes the request contents stored within the instance and pushes it into "output".
  * 
@@ -253,7 +248,7 @@ hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Response(hypertext_Instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat);
+hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat);
 
 /** \brief Takes the response contents stored within the instance and pushes it into "output".
  * 
@@ -270,11 +265,7 @@ hypertext_EXPORT uint8_t hypertext_API hypertext_Output_Request(hypertext_Instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_API hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
-
-#ifndef _MSC_VER
-#undef __STDC_WANT_LIB_EXT1__
-#endif
+hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
 
 #ifdef __cplusplus
 }

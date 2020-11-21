@@ -26,7 +26,7 @@
 char* hypertext_utilities_append_null(const char* text, size_t orig_length)
 {
     char* out = calloc(orig_length + 1, sizeof(char));
-    memcpy_s(out, sizeof(char) * (orig_length + 1), text, sizeof(char) * orig_length);
+    memcpy(out, text, sizeof(char) * orig_length);
     return out;
 }
 
@@ -35,11 +35,7 @@ char* hypertext_utilities_cut_text(const char* text, size_t start, size_t end)
     if (start >= end) return NULL;
 
     char* slice = calloc(end - start + 1, sizeof(char));
-    if (memcpy_s(slice, sizeof(char) * (end - start + 1), text + start, sizeof(char) * (end - start + 1)) != 0)
-    {
-        if (slice != NULL) free(slice);
-        return NULL;
-    }
+    memcpy(slice, text + start, sizeof(char) * (end - start + 1));
 
     return slice;
 }
@@ -48,7 +44,6 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
 {
     if (input == NULL || strlen(input) <= 1 || input[0] == '\n' || (input[0] == '\r' && input[1] == '\n') || (fields == NULL && *field_count != 0)) return 0;
 
-    errno_t err = 0;
     size_t padding = 0, count = 0;
 
     hypertext_Header_Field* i_fields = NULL;
@@ -82,14 +77,10 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
                 .value  = calloc(value_length + 1, sizeof(char))
             };
 
-            err = memcpy_s((char*)field.key, key_length * sizeof(char), hypertext_utilities_cut_text(input, padding, padding + key_length), key_length * sizeof(char));
-            if (err != 0) return 0;
+            memcpy((char*)field.key, hypertext_utilities_cut_text(input, padding, padding + key_length), key_length * sizeof(char));
+            memcpy((char*)field.value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length * sizeof(char));
 
-            err = memcpy_s((char*)field.value, value_length * sizeof(char), hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length * sizeof(char));
-            if (err != 0) return 0;
-
-            err = memcpy_s(&i_fields[count], sizeof(hypertext_Header_Field), &field, sizeof(field));
-            if (err != 0) return 0;
+            memcpy(&i_fields[count], &field, sizeof(field));
         }
 
         count++;
@@ -100,24 +91,13 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
 
     if (*field_count == 0)
     {
-        err = memcpy_s(field_count, sizeof(size_t), &count, sizeof(size_t));
-        if (err != 0) return 0;
-
+        memcpy(field_count, &count, sizeof(size_t));
         return padding + 1;
     }
 
     if (count > *field_count) return 0;
 
-    for (size_t i = 0; i != count; i++)
-    {
-        err = memcpy_s(&fields[i], sizeof(hypertext_Header_Field), &i_fields[i], sizeof(i_fields[i]));
-        
-        if (err != 0)
-        {
-            free(i_fields);
-            return 0;
-        }
-    }
+    for (size_t i = 0; i != count; i++) memcpy(&fields[i], &i_fields[i], sizeof(i_fields[i]));
 
     free(i_fields);    
 

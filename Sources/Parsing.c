@@ -91,8 +91,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
         if (length > strlen(input) - offset) length = strlen(input) - offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        errno_t err = memcpy_s(instance->body, length + 1, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
-        if (err != 0) return hypertext_Result_Invalid_Parameters;        
+        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
     }
 
     return hypertext_Result_Success;
@@ -145,8 +144,7 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
         if (length > strlen(input) - offset) length = strlen(input) - offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        errno_t err = memcpy_s(instance->body, length + 1, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
-        if (err != 0) return hypertext_Result_Invalid_Parameters;        
+        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
     }
 
     return hypertext_Result_Success;
