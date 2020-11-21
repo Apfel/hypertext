@@ -1,0 +1,9 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cSpell.allowCompoundWords": true,
+    "cmake.buildDirectory": "${workspaceFolder}/Build",
+    "files.associations": {
+        "*.rc": "c",
+        "*.h": "c"
+    }
+}

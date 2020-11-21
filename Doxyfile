@@ -1,0 +1,8 @@
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "hypertext"
+PROJECT_NUMBER         = 1.0.0
+PROJECT_BRIEF          = "Lightweight HTTP parser and creator"
+OUTPUT_DIRECTORY       = "docs"
+GENERATE_LATEX         = NO
+INPUT                  = README.md Include/hypertext.h
+USE_MDFILE_AS_MAINPAGE = README.md
