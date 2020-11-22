@@ -21,26 +21,34 @@
 
 #include "Internals.h"
 
-#include <stdlib.h>
+#include <string.h>
 
-hypertext_Instance* hypertext_New()
+uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output)
 {
-    hypertext_Instance* instance = calloc(1, sizeof(hypertext_Instance));
-    if (instance == NULL) return NULL;
-
-    instance->type = hypertext_Instance_Content_Type_Unknown;
-
-    return instance;
+    return hypertext_Result_Success;
 }
 
-void hypertext_Destroy(hypertext_Instance* instance)
+uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char** output)
 {
-    instance->code          = 0;
-    instance->field_count   = 0;
-    instance->method        = hypertext_Method_Unknown;
-    instance->version       = 0;
+    return hypertext_Result_Success;
+}
 
-    if (instance->body      != NULL) free(instance->body);
-    if (instance->fields    != NULL) free(instance->fields);
-    if (instance->path      != NULL) free(instance->path);
+uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output)
+{
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint8_t* output)
+{
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name)
+{
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char** output)
+{
+    return hypertext_Result_Success;
 }

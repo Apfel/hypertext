@@ -34,35 +34,35 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
     switch (instance->method)
     {
     case hypertext_Method_OPTIONS:
-        sprintf(method_str, "OPTIONS");
+        snprintf(method_str, 8, "OPTIONS");
         break;
 
     case hypertext_Method_GET:
-        sprintf(method_str, "GET");
+        snprintf(method_str, 8, "GET");
         break;
 
     case hypertext_Method_HEAD:
-        sprintf(method_str, "HEAD");
+        snprintf(method_str, 8, "HEAD");
         break;
 
     case hypertext_Method_POST:
-        sprintf(method_str, "POST");
+        snprintf(method_str, 8, "POST");
         break;
 
     case hypertext_Method_PUT:
-        sprintf(method_str, "PUT");
+        snprintf(method_str, 8, "PUT");
         break;
 
     case hypertext_Method_DELETE:
-        sprintf(method_str, "DELETE");
+        snprintf(method_str, 8, "DELETE");
         break;
 
     case hypertext_Method_TRACE:
-        sprintf(method_str, "TRACE");
+        snprintf(method_str, 8, "TRACE");
         break;
 
     case hypertext_Method_CONNECT:
-        sprintf(method_str, "CONNECT");
+        snprintf(method_str, 8, "CONNECT");
         break;
     }
 
@@ -86,29 +86,29 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
     {
         char* out_str = calloc(out_len + 1, sizeof(char));
 
-        char* term = calloc((keep_compat ? 2 : 1) + 1, sizeof(char));
-        keep_compat ? sprintf(term, "\r\n") : sprintf(term, "\n");
+        char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
+        keep_compat ? snprintf(term, 2, "\r\n") : snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
         switch (instance->version)
         {
         case hypertext_HTTP_Version_1_0:
-            sprintf(ver_str, "1.0");
+            snprintf(ver_str, 3, "1.0");
             break;
 
         case hypertext_HTTP_Version_1_1:
-            sprintf(ver_str, "1.1");
+            snprintf(ver_str, 3, "1.1");
             break;
         }
 
-        sprintf(out_str, "%s %s HTTP/%s%s", method_str, instance->path, ver_str, term);
+        snprintf(out_str, out_len, "%s %s HTTP/%s%s", method_str, instance->path, ver_str, term);
 
-        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) sprintf(out_str, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
+        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
 
-        sprintf(out_str, "%s%s", out_str, term);
+        snprintf(out_str, out_len, "%s%s", out_str, term);
 
-        if (instance->body != NULL) sprintf(out_str, "%s%s", out_str, instance->body);
+        if (instance->body != NULL) snprintf(out_str, out_len, "%s%s", out_str, instance->body);
 
         memcpy(output, out_str, out_len);
 
@@ -130,168 +130,168 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
 
     if (keep_desc)
     {
-        description = calloc(512, sizeof(char));
+        description = calloc(256, sizeof(char));
 
         switch (instance->code)
         {
         case hypertext_Status_Continue:
-            sprintf(description, "Continue");
+            snprintf(description, 256, "Continue");
             break;
 
         case hypertext_Status_Switching_Protocols:
-            sprintf(description, "Switching Protocols");
+            snprintf(description, 256, "Switching Protocols");
             break;
 
         case hypertext_Status_OK:
-            sprintf(description, "OK");
+            snprintf(description, 256, "OK");
             break;
 
         case hypertext_Status_Created:
-            sprintf(description, "Created");
+            snprintf(description, 256, "Created");
             break;
 
         case hypertext_Status_Accepted:
-            sprintf(description, "Accepted");
+            snprintf(description, 256, "Accepted");
             break;
 
         case hypertext_Status_Non_Authoritative_Information:
-            sprintf(description, "Non-Authoritative Information");
+            snprintf(description, 256, "Non-Authoritative Information");
             break;
 
         case hypertext_Status_No_Content:
-            sprintf(description, "No Content");
+            snprintf(description, 256, "No Content");
             break;
 
         case hypertext_Status_Reset_Content:
-            sprintf(description, "Reset Content");
+            snprintf(description, 256, "Reset Content");
             break;
 
         case hypertext_Status_Partial_Content:
-            sprintf(description, "Partial Content");
+            snprintf(description, 256, "Partial Content");
             break;
 
         case hypertext_Status_Multiple_Choices:
-            sprintf(description, "Multiple Choices");
+            snprintf(description, 256, "Multiple Choices");
             break;
 
         case hypertext_Status_Moved_Permanentely:
-            sprintf(description, "Moved Permanentely");
+            snprintf(description, 256, "Moved Permanentely");
             break;
 
         case hypertext_Status_Found:
-            sprintf(description, "Found");
+            snprintf(description, 256, "Found");
             break;
 
         case hypertext_Status_See_Other:
-            sprintf(description, "See Other");
+            snprintf(description, 256, "See Other");
             break;
 
         case hypertext_Status_Not_Modified:
-            sprintf(description, "Not Modified");
+            snprintf(description, 256, "Not Modified");
             break;
 
         case hypertext_Status_Use_Proxy:
-            sprintf(description, "Use Proxy");
+            snprintf(description, 256, "Use Proxy");
             break;
 
         case hypertext_Status_Unused_306:
-            sprintf(description, "Unused");
+            snprintf(description, 256, "Unused");
             break;
 
         case hypertext_Status_Temporary_Redirect:
-            sprintf(description, "Temporary Redirect");
+            snprintf(description, 256, "Temporary Redirect");
             break;
 
         case hypertext_Status_Bad_Request:
-            sprintf(description, "Bad Request");
+            snprintf(description, 256, "Bad Request");
             break;
 
         case hypertext_Status_Unauthorized:
-            sprintf(description, "Unauthorized");
+            snprintf(description, 256, "Unauthorized");
             break;
 
         case hypertext_Status_Payment_Required:
-            sprintf(description, "Payment Required");
+            snprintf(description, 256, "Payment Required");
             break;
 
         case hypertext_Status_Forbidden:
-            sprintf(description, "Forbidden");
+            snprintf(description, 256, "Forbidden");
             break;
 
         case hypertext_Status_Not_Found:
-            sprintf(description, "Not Found");
+            snprintf(description, 256, "Not Found");
             break;
 
         case hypertext_Status_Method_Not_Allowed:
-            sprintf(description, "Method Not Allowed");
+            snprintf(description, 256, "Method Not Allowed");
             break;
 
         case hypertext_Status_Not_Acceptable:
-            sprintf(description, "Not Acceptable");
+            snprintf(description, 256, "Not Acceptable");
             break;
 
         case hypertext_Status_Proxy_Authentication_Required:
-            sprintf(description, "Proxy Authentication Required");
+            snprintf(description, 256, "Proxy Authentication Required");
             break;
 
         case hypertext_Status_Request_Timeout:
-            sprintf(description, "Request Timeout");
+            snprintf(description, 256, "Request Timeout");
             break;
 
         case hypertext_Status_Conflict:
-            sprintf(description, "Conflict");
+            snprintf(description, 256, "Conflict");
             break;
 
         case hypertext_Status_Gone:
-            sprintf(description, "Gone");
+            snprintf(description, 256, "Gone");
             break;
 
         case hypertext_Status_Length_Required:
-            sprintf(description, "Length Required");
+            snprintf(description, 256, "Length Required");
             break;
 
         case hypertext_Status_Precondition_Failed:
-            sprintf(description, "Precondition Failed");
+            snprintf(description, 256, "Precondition Failed");
             break;
 
         case hypertext_Status_Request_Entity_Too_Large:
-            sprintf(description, "Request Entity Too Large");
+            snprintf(description, 256, "Request Entity Too Large");
             break;
 
         case hypertext_Status_Request_URI_Too_Long:
-            sprintf(description, "Request URI Too Long");
+            snprintf(description, 256, "Request URI Too Long");
             break;
 
         case hypertext_Status_Unsupported_Media_Type:
-            sprintf(description, "Unsupported Media Type");
+            snprintf(description, 256, "Unsupported Media Type");
             break;
 
         case hypertext_Status_Requested_Range_Not_Satisfiable:
-            sprintf(description, "Requested Range Not Satisfiable");
+            snprintf(description, 256, "Requested Range Not Satisfiable");
             break;
 
         case hypertext_Status_Expectation_Failed:
-            sprintf(description, "Expectation Failed");
+            snprintf(description, 256, "Expectation Failed");
             break;
 
         case hypertext_Status_Not_Implemented:
-            sprintf(description, "Not Implemented");
+            snprintf(description, 256, "Not Implemented");
             break;
 
         case hypertext_Status_Bad_Gateway:
-            sprintf(description, "Bad Gateway");
+            snprintf(description, 256, "Bad Gateway");
             break;
 
         case hypertext_Status_Service_Unavailable:
-            sprintf(description, "Service Unavailable");
+            snprintf(description, 256, "Service Unavailable");
             break;
 
         case hypertext_Status_Gateway_Timeout:
-            sprintf(description, "Gateway Timeout");
+            snprintf(description, 256, "Gateway Timeout");
             break;
 
         case hypertext_Status_HTTP_Version_Not_Supported:
-            sprintf(description, "HTTP Version Not Supported");
+            snprintf(description, 256, "HTTP Version Not Supported");
             break;
         }
     }
@@ -316,32 +316,32 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
     {
         char* out_str = calloc(out_len + 1, sizeof(char));
 
-        char* term = calloc((keep_compat ? 2 : 1) + 1, sizeof(char));
-        keep_compat ? sprintf(term, "\r\n") : sprintf(term, "\n");
+        char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
+        keep_compat ? snprintf(term, 2, "\r\n") : snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
         switch (instance->version)
         {
         case hypertext_HTTP_Version_1_0:
-            sprintf(ver_str, "1.0");
+            snprintf(ver_str, 3, "1.0");
             break;
 
         case hypertext_HTTP_Version_1_1:
-            sprintf(ver_str, "1.1");
+            snprintf(ver_str, 3, "1.1");
             break;
         }
 
-        sprintf(out_str, "HTTP/%s %d", ver_str, instance->code);
-        if (keep_desc) sprintf(out_str, "%s %s ", out_str, description);
+        snprintf(out_str, out_len, "HTTP/%s %d", ver_str, instance->code);
+        if (keep_desc) snprintf(out_str, out_len, "%s %s ", out_str, description);
 
-        sprintf(out_str, "%s%s", out_str, term);
+        snprintf(out_str, out_len, "%s%s", out_str, term);
 
-        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) sprintf(out_str, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
+        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
 
-        sprintf(out_str, "%s%s", out_str, term);
+        snprintf(out_str, out_len, "%s%s", out_str, term);
 
-        if (instance->body != NULL && strlen(instance->body) > 0) sprintf(out_str, "%s%s", out_str, instance->body);
+        if (instance->body != NULL && strlen(instance->body) > 0) snprintf(out_str, out_len, "%s%s", out_str, instance->body);
 
         memcpy(output, out_str, out_len);
 

@@ -21,12 +21,20 @@ cmake_minimum_required(VERSION 3.2)
 project(hypertext C)
 
 option(BUILD_SHARED "Builds hypertext as a shared library." OFF)
-option(BUILD_TESTS  "Builds tests for hypertext."           ON) # TODO: turn off later
+option(BUILD_TESTS  "Builds tests for hypertext."           OFF)
 
 if(BUILD_SHARED)
+    message("-- > Building mode set to shared.")
     set(BUILD_MODE SHARED)
 else()
+    message("-- > Building mode set to static.")
     set(BUILD_MODE STATIC)
+endif()
+
+if(BUILD_TESTS)
+    message("-- > Tests enabled.")
+else()
+    message("-- > Tests disabled.")
 endif()
 
 if(MSVC)
@@ -41,6 +49,7 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Utilities.h
     
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Creation.c
+    ${CMAKE_CURRENT_LIST_DIR}/Sources/Fetching.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Instance.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Parsing.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Output.c
@@ -69,34 +78,22 @@ if(BUILD_TESTS)
     enable_testing()
 
     project(hypertext_test_response_creation C)
-    add_executable(hypertext_test_response_creation
-        ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Response.c
-        ${ADDITIONAL_SOURCES}
-    )
+    add_executable(hypertext_test_response_creation ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Response.c ${ADDITIONAL_SOURCES})
     target_link_libraries(hypertext_test_response_creation PUBLIC hypertext)
     add_test(hypertext hypertext_test_response_creation)
 
     project(hypertext_test_request_creation C)
-    add_executable(hypertext_test_request_creation
-        ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Request.c
-        ${ADDITIONAL_SOURCES}
-    )
+    add_executable(hypertext_test_request_creation ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Request.c ${ADDITIONAL_SOURCES})
     target_link_libraries(hypertext_test_request_creation PUBLIC hypertext)
     add_test(hypertext hypertext_test_request_creation)
 
     project(hypertext_test_response_parsing C)
-    add_executable(hypertext_test_response_parsing
-        ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Response.c
-        ${ADDITIONAL_SOURCES}
-    )
+    add_executable(hypertext_test_response_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Response.c ${ADDITIONAL_SOURCES})
     target_link_libraries(hypertext_test_response_parsing PUBLIC hypertext)
     add_test(hypertext hypertext_test_response_parsing)
 
     project(hypertext_test_request_parsing C)
-    add_executable(hypertext_test_request_parsing
-        ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Request.c
-        ${ADDITIONAL_SOURCES}
-    )
+    add_executable(hypertext_test_request_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Request.c ${ADDITIONAL_SOURCES})
     target_link_libraries(hypertext_test_request_parsing PUBLIC hypertext)
     add_test(hypertext hypertext_test_request_parsing)
 endif()

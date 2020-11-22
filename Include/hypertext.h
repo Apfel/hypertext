@@ -267,6 +267,61 @@ hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, 
  */
 hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
 
+/** \brief Returns the request's method.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output);
+
+/** \brief Returns the request's path.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char** output);
+
+/** \brief Returns the used version of the response/request stored inside.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output);
+
+/** \brief Returns the response's return code.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint8_t* output);
+
+/** \brief Fetches a header field based on its key.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * \param key_name The name to search for.
+ *
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name);
+
+/** \brief Returns the body of the request/response.
+ * \param instance The instance to use.
+ * \param output The output variable.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char** output);
+
 #ifdef __cplusplus
 }
 #endif
