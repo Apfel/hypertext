@@ -90,10 +90,12 @@ enum hypertext_Result
      * \see hypertext_Destroy
      */
     hypertext_Result_Invalid_Instance,
-    
+
     hypertext_Result_Invalid_Parameters, /// Invalid parameters were supplied; i.e the instance was NULL, the input contained invalid line endings, invalid format, version and so on.
     hypertext_Result_Invalid_Method, /// The request used an unsupported method.
     hypertext_Result_Invalid_Version, /// The version set in the request is invalid or not supported.
+    hypertext_Result_Not_Found, /// The specific header field doesn't exist.
+    hypertext_Result_No_Body, /// The instance does not contain a body.
 
     hypertext_Result_Unknown = UINT8_MAX /// Unknown or unset result; mostly used within a freshly created instance.
 };
@@ -276,6 +278,15 @@ hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance,
  */
 hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output);
 
+/** \brief Returns the path's length.
+ * \param instance The instance to use.
+ * \param length The output to copy the length to.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Path_Length(hypertext_Instance* instance, size_t* length);
+
 /** \brief Returns the request's path.
  * \param instance The instance to use.
  * \param output The output variable.
@@ -283,7 +294,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, ui
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char** output);
+hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t length);
 
 /** \brief Returns the used version of the response/request stored inside.
  * \param instance The instance to use.
@@ -301,7 +312,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, u
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint8_t* output);
+hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint16_t* output);
 
 /** \brief Fetches a header field based on its key.
  * \param instance The instance to use.
@@ -313,6 +324,15 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint
  */
 hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name);
 
+/** \brief Returns the body's length.
+ * \param instance The instance to use.
+ * \param length The output to copy the length to.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Fetch_Body_Length(hypertext_Instance* instance, size_t* length);
+
 /** \brief Returns the body of the request/response.
  * \param instance The instance to use.
  * \param output The output variable.
@@ -320,7 +340,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char** output);
+hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t length);
 
 #ifdef __cplusplus
 }

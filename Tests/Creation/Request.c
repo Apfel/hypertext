@@ -38,8 +38,10 @@ int main(int argc, char** argv)
     hypertext_Header_Field field_user_agent = { "User-Agent", "hypertext-Example" };
     hypertext_Header_Field fields[2]        = { field_host, field_user_agent };
 
+    const char* body = "Hello!";
+
     int code = 1;
-    switch (hypertext_Create_Request(instance, hypertext_Method_GET, path, strlen(path), fields, sizeof(fields) / sizeof(hypertext_Header_Field), NULL, 0))
+    switch (hypertext_Create_Request(instance, hypertext_Method_GET, path, strlen(path), fields, sizeof(fields) / sizeof(hypertext_Header_Field), body, strlen(body)))
     {
     case hypertext_Result_Success:
         code = 0;
