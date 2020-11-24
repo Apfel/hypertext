@@ -88,18 +88,18 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
         char* out_str = calloc(out_len + 1, sizeof(char));
 
         char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
-        keep_compat ? snprintf(term, 2, "\r\n") : snprintf(term, 2, "\n");
+        keep_compat ? snprintf(term, 3, "\r\n") : snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
         switch (instance->version)
         {
         case hypertext_HTTP_Version_1_0:
-            snprintf(ver_str, 3, "1.0");
+            snprintf(ver_str, 4, "1.0");
             break;
 
         case hypertext_HTTP_Version_1_1:
-            snprintf(ver_str, 3, "1.1");
+            snprintf(ver_str, 4, "1.1");
             break;
         }
 
@@ -318,18 +318,18 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
         char* out_str = calloc(out_len + 1, sizeof(char));
 
         char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
-        keep_compat ? snprintf(term, 2, "\r\n") : snprintf(term, 2, "\n");
+        keep_compat ? snprintf(term, 3, "\r\n") : snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
         switch (instance->version)
         {
         case hypertext_HTTP_Version_1_0:
-            snprintf(ver_str, 3, "1.0");
+            snprintf(ver_str, 4, "1.0");
             break;
 
         case hypertext_HTTP_Version_1_1:
-            snprintf(ver_str, 3, "1.1");
+            snprintf(ver_str, 4, "1.1");
             break;
         }
 
