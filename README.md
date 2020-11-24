@@ -2,9 +2,8 @@
 **hypertext** is a C-written library that shall make your life a little less stressful when dealing with [RFC 2616](https://tools.ietf.org/html/rfc2616) (`shall` defined as per [RFC 2119](https://tools.ietf.org/html/rfc2119)).  
 hypertext depends only on standard stuff, but has some fancy support sprinkled in for some stuff, like a manifest for Windows.
 
-## Issues and notes
+## Issues
 - The doxygen-based documentation is quite broken; doxygen skips values and whatnot. (Is this my or doxygen's fault?).
-- Being able to append more header fields after creating a request or a response would likely be useful.
 
 ## Usage
 Documentation can be generated via doxygen.  
