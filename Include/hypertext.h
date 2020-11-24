@@ -297,23 +297,17 @@ hypertext_EXPORT uint8_t hypertext_Remove_Field(hypertext_Instance* instance, co
  */
 hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output);
 
-/** \brief Returns the path's length.
- * \param instance The instance to use.
- * \param length The output to copy the length to.
- * 
- * \return A normal return code.
- * \sa hypertext_Result.
- */
-hypertext_EXPORT uint8_t hypertext_Fetch_Path_Length(hypertext_Instance* instance, size_t* length);
-
 /** \brief Returns the request's path.
  * \param instance The instance to use.
  * \param output The output variable.
+ * \param length The length of the body to return or to process.
+ * 
+ * \note If output is NULL, the length will be overwritten. Use this to fetch the length.
  * 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t length);
+hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t* length);
 
 /** \brief Returns the used version of the response/request stored inside.
  * \param instance The instance to use.

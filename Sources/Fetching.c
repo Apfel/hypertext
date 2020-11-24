@@ -32,21 +32,19 @@ uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output)
     return hypertext_Result_Success;
 }
 
-uint8_t hypertext_Fetch_Path_Length(hypertext_Instance* instance, size_t* length)
+uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t* length)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
+    if (length == NULL) return hypertext_Result_Invalid_Parameters;
 
-    size_t size = strlen(instance->path);
-    memcpy(length, &size, sizeof(size_t));
+    if (output == NULL)
+    {
+        size_t path_length = strlen(instance->path);
+        memcpy(length, &path_length, sizeof(size_t));
+        return hypertext_Result_Success;
+    }
 
-    return hypertext_Result_Success;
-}
-
-uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t length)
-{
-    if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
-
-    strncpy(output, instance->path, length > strlen(instance->path) ? length : strlen(instance->path));
+    strncpy(output, instance->path, *length > strlen(instance->path) ? *length : strlen(instance->path));
 
     return hypertext_Result_Success;
 }
