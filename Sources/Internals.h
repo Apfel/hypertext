@@ -22,18 +22,6 @@
 
 #include <hypertext.h>
 
-#ifdef _MSC_VER
-#define inline __inline
-#endif
-
-#if defined(_WIN32)
-#define hypertext_NO_EXPORT 
-#elif defined(__GNUC__) || defined(COMPILER_GCC) || defined(__APPLE__)
-#define hypertext_NO_EXPORT __attribute__((visibility("hidden")))
-#else
-#error "Your compiler and/or platform might not be supported."
-#endif
-
 struct hypertext_Instance
 {
     char*                   body;
@@ -46,18 +34,12 @@ struct hypertext_Instance
     uint8_t                 version;
 };
 
-hypertext_NO_EXPORT inline bool hypertext_utilities_is_valid_instance(hypertext_Instance* instance)
+inline bool hypertext_utilities_is_valid_instance(hypertext_Instance* instance)
 {
     if (instance == NULL) return false;
     else if (instance->type == hypertext_Instance_Content_Type_Request || instance->type == hypertext_Instance_Content_Type_Response) return true;
 
     return false;
 }
-
-#undef hypertext_NO_EXPORT
-
-#ifdef _MSC_VER
-#undef inline
-#endif
 
 #endif

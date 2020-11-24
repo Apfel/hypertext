@@ -22,19 +22,8 @@
 
 #include <hypertext.h>
 
-#if defined(_WIN32)
-#define hypertext_NO_EXPORT 
-#elif defined(__GNUC__) || defined(COMPILER_GCC) || defined(__APPLE__)
-#define hypertext_NO_EXPORT __attribute__((visibility("hidden")))
-#else
-#error "Your compiler and/or platform might not be supported."
-#endif
-
-hypertext_NO_EXPORT char* hypertext_utilities_append_null(const char* text, size_t orig_length);
-hypertext_NO_EXPORT char* hypertext_utilities_cut_text(const char* text, size_t start, size_t end);
-hypertext_NO_EXPORT size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Field* fields, size_t* field_count);
-
-
-#undef hypertext_NO_EXPORT
+char* hypertext_utilities_append_null(const char* text, size_t orig_length);
+char* hypertext_utilities_cut_text(const char* text, size_t start, size_t end);
+size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Field* fields, size_t* field_count);
 
 #endif
