@@ -75,4 +75,56 @@ uint8_t hypertext_Remove_Field(hypertext_Instance* instance, const char* input)
     return hypertext_Result_Success;
 }
 
-// TODO: add methods to change method, path etc.
+uint8_t hypertext_Set_Body(hypertext_Instance* instance, const char* body, size_t length)
+{
+    if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
+    else if (body == NULL || length == 0) return hypertext_Result_Invalid_Parameters;
+
+    if (strlen(instance->body) < length) instance->body = realloc(instance->body, sizeof(char) * length);
+
+    strncpy(instance->body, body, length);
+
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Set_Code(hypertext_Instance* instance, uint16_t code)
+{
+    if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Response) return hypertext_Result_Invalid_Instance;
+    else if (code < 100) return hypertext_Result_Invalid_Parameters;
+
+    instance->code = code;
+
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Set_Method(hypertext_Instance* instance, uint8_t method)
+{
+    if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
+    else if (method == hypertext_Method_Unknown || method >= hypertext_Method_Max) return hypertext_Result_Invalid_Parameters;
+
+    instance->method = method;
+
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Set_Path(hypertext_Instance* instance, const char* path, size_t length)
+{
+    if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
+    else if (path == NULL) return hypertext_Result_Invalid_Parameters;
+
+    if (strlen(instance->path) < length) instance->path = realloc(instance->path, sizeof(char) * length);
+
+    strncpy(instance->path, path, length);
+
+    return hypertext_Result_Success;
+}
+
+uint8_t hypertext_Set_Version(hypertext_Instance* instance, uint8_t version)
+{
+    if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
+    else if (version == hypertext_HTTP_Version_Unknown || version >= hypertext_HTTP_Version_Max) return hypertext_Result_Invalid_Parameters;
+
+    instance->version = version;
+
+    return hypertext_Result_Success;
+}

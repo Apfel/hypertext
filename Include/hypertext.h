@@ -158,8 +158,10 @@ enum hypertext_Status
 /// Different HTTP versions supported by hypertext.
 enum hypertext_HTTP_Version
 {
+    hypertext_HTTP_Version_Unknown, // Only used inside for error checking.
     hypertext_HTTP_Version_1_0,
-    hypertext_HTTP_Version_1_1
+    hypertext_HTTP_Version_1_1,
+    hypertext_HTTP_Version_Max // Only used inside for error checking.
 };
 
 /** \brief Creates a new instance.
@@ -177,6 +179,7 @@ hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
  * \param method The method used in the request.
  * \param path The absolute path to the file.
  * \param path_length The length of the path.
+ * \param version The HTTP version this request supports.
  * \param fields All header fields.
  * \param field_count The field count.
  * \param body The body's content.
@@ -188,11 +191,12 @@ hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, uint8_t version, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Initializes the instance as a new request.
  * 
  * \param instance The instance to use.
+ * \param version The HTTP version this request supports.
  * \param code The response code.
  * \param fields All header fields.
  * \param field_count The field count.
@@ -205,7 +209,7 @@ hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Parses a raw request coming from a UTF-8 character array.
  * 
@@ -357,6 +361,57 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field_Count(hypertext_Instance* 
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t* length);
+
+/** \brief Sets a new body.
+ * \param instance The instance to use.
+ * \param body The body to use.
+ * \param length The length of the body to use.
+ * 
+ * \note The body cannot be NULL and the length must be greater than 0.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Set_Body(hypertext_Instance* instance, const char* body, size_t length);
+
+/** \brief Sets the response code.
+ * \param instance The instance to use.
+ * \param code The code to set.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Set_Code(hypertext_Instance* instance, uint16_t code);
+
+/** \brief Sets the request method.
+ * \param instance The instance to use.
+ * \param method The method to set.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Set_Method(hypertext_Instance* instance, uint8_t method);
+
+/** \brief Sets the path for this request.
+ * \param instance The instance to use.
+ * \param path The path to set.
+ * \param length The length of the body to return or to process.
+ * 
+ * \note The body cannot be NULL and the length must be greater than 0.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Set_Path(hypertext_Instance* instance, const char* path, size_t length);
+
+/** \brief Sets the version for this instance.
+ * \param instance The instance to use.
+ * \param version The version to support.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Set_Version(hypertext_Instance* instance, uint8_t version);
 
 #ifdef __cplusplus
 }

@@ -25,10 +25,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length)
+uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, uint8_t version, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Unknown) return hypertext_Result_Invalid_Instance;
-    else if (path == NULL || method == hypertext_Method_Unknown || method >= hypertext_Method_Max) return hypertext_Result_Invalid_Parameters;
+    else if (path == NULL || method == hypertext_Method_Unknown || method >= hypertext_Method_Max || version == hypertext_HTTP_Version_Unknown || version >= hypertext_HTTP_Version_Max) return hypertext_Result_Invalid_Parameters;
 
     instance->type = hypertext_Instance_Content_Type_Request;
 
@@ -54,13 +54,15 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
         memcpy(instance->body, body, body_length * sizeof(char));
     }
 
+    instance->version = version;
+
     return hypertext_Result_Success;
 }
 
-uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length)
+uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Unknown) return hypertext_Result_Invalid_Instance;
-    else if (code == hypertext_Status_Unknown || code >= hypertext_Status_Max) return hypertext_Result_Invalid_Parameters;
+    else if (code == hypertext_Status_Unknown || code >= hypertext_Status_Max || version == hypertext_HTTP_Version_Unknown || version >= hypertext_HTTP_Version_Max) return hypertext_Result_Invalid_Parameters;
 
     instance->type = hypertext_Instance_Content_Type_Response;
 
@@ -80,6 +82,8 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint16_t code, h
         instance->body = calloc(body_length + 1, sizeof(char));
         memcpy(instance->body, body, body_length * sizeof(char));
     }
+
+    instance->version = version;
 
     return hypertext_Result_Success;
 }

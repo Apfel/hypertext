@@ -27,7 +27,7 @@ cmake --install build [--prefix Install] [--config Release] # Use the prefix swi
 ```
 
 ## Test
-Use CTest to test hypertext.  
+CTest is used to test hypertext.  
 Once `BUILD_TESTS` is turned on, four tests will be built.
 
 | Name | Description
