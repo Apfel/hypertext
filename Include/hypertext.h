@@ -95,6 +95,7 @@ enum hypertext_Result
     hypertext_Result_Invalid_Method, /// The request used an unsupported method.
     hypertext_Result_Invalid_Version, /// The version set in the request is invalid or not supported.
     hypertext_Result_Not_Found, /// The specific header field doesn't exist.
+    hypertext_Result_Already_Present, /// An another header field with the same key exists already.
     hypertext_Result_No_Body, /// The instance does not contain a body.
 
     hypertext_Result_Unknown = UINT8_MAX /// Unknown or unset result; mostly used within a freshly created instance.
@@ -269,6 +270,24 @@ hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, 
  */
 hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
 
+/** \brief Adds a header field to the instance.
+ * \param instance The instance to use.
+ * \param input The header field to add.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Add_Field(hypertext_Instance* instance, hypertext_Header_Field* input);
+
+/** \brief Removes a header field from the instance.
+ * \param instance The instance to use.
+ * \param input The name of the field to remove.
+ * 
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_Remove_Field(hypertext_Instance* instance, const char* input);
+
 /** \brief Returns the request's method.
  * \param instance The instance to use.
  * \param output The output variable.
@@ -324,23 +343,26 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint
  */
 hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name);
 
-/** \brief Returns the body's length.
+/** \brief Returns the amount of header fields.
  * \param instance The instance to use.
- * \param length The output to copy the length to.
- * 
+ * \param count The output variable.
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Body_Length(hypertext_Instance* instance, size_t* length);
+hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field_Count(hypertext_Instance* instance, size_t* count);
 
 /** \brief Returns the body of the request/response.
  * \param instance The instance to use.
  * \param output The output variable.
+ * \param length The length of the body to return or to process.
+ * 
+ * \note If output is NULL, the length will be overwritten. Use this to fetch the length.
  * 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t length);
+hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t* length);
 
 #ifdef __cplusplus
 }

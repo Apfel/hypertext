@@ -100,7 +100,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
 uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Unknown) return hypertext_Result_Invalid_Instance;
-    if (input == NULL) return hypertext_Result_Invalid_Parameters;
+    else if (input == NULL) return hypertext_Result_Invalid_Parameters;
 
     instance->type = hypertext_Instance_Content_Type_Response;
 

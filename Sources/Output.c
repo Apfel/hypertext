@@ -29,6 +29,7 @@
 uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
+    else if (output == NULL || length == NULL) return hypertext_Result_Invalid_Parameters;
 
     char* method_str = calloc(9, sizeof(char));
     switch (instance->method)

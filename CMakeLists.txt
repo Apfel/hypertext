@@ -51,6 +51,7 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Creation.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Fetching.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Instance.c
+    ${CMAKE_CURRENT_LIST_DIR}/Sources/Modifying.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Parsing.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Output.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Utilities.c
