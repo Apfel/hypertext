@@ -15,8 +15,8 @@ jobs:
 
     - name: Configure
       shell: powershell
-      working-directory: ${{runner.workspace}}
-      run: cmake -B build -DBUILD_TESTS=ON -DBUILD_SHARED=ON
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON -DBUILD_SHARED=ON
 
     - name: Build
       shell: powershell
