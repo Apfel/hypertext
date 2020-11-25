@@ -40,11 +40,10 @@ int main(int argc, char** argv)
 
     const char* body = "Hello!";
 
-    int code = 1;
-    switch (hypertext_Create_Request(instance, hypertext_Method_GET, path, strlen(path), fields, sizeof(fields) / sizeof(hypertext_Header_Field), body, strlen(body)))
+    uint8_t code = hypertext_Create_Request(instance, hypertext_Method_GET, path, strlen(path), hypertext_HTTP_Version_1_1, fields, sizeof(fields) / sizeof(hypertext_Header_Field), body, strlen(body));
+    switch (code)
     {
     case hypertext_Result_Success:
-        code = 0;
         printf("Success.\n");
         break;
 
@@ -55,6 +54,10 @@ int main(int argc, char** argv)
     case hypertext_Result_Invalid_Method:
         printf("Error: hypertext_Create_Request failed with code \"invalid request method\".\n");
         break;
+
+    default:
+        printf("An error occurred that isn't handled separately; code %d.\n", code);
+        break; 
     }
 
     hypertext_Destroy(instance);

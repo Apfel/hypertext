@@ -34,8 +34,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    int code = 1;
-    switch (hypertext_Parse_Request(instance, example, 50))
+    uint8_t code = hypertext_Parse_Request(instance, example, 50);
+    switch (code)
     {
     case hypertext_Result_Success:
         code = 0;
@@ -48,6 +48,10 @@ int main(int argc, char** argv)
 
     case hypertext_Result_Invalid_Method:
         printf("Error: hypertext_Parse_Request failed with code \"invalid request method\".\n");
+        break;
+
+    default:
+        printf("An error occurred that isn't handled separately; code %d.\n", code);
         break;
     }
 

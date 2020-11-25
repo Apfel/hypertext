@@ -34,18 +34,29 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    int code = 1;
-    switch (hypertext_Parse_Response(instance, example, 50))
+    uint8_t code = hypertext_Parse_Response(instance, example, 50);
+    switch (code)
     {
     case hypertext_Result_Success:
-        code = 0;
         printf("Success.\n");
         break;
 
     case hypertext_Result_Invalid_Parameters:
         printf("Error: hypertext_Parse_Response failed with code \"invalid parameters\".\n");
         break;
+
+    default:
+        printf("An error occurred that isn't handled separately; code %d.\n", code);
+        break;
     }
+
+    if (code != 0)
+    {
+        hypertext_Destroy(instance);
+        free(instance);
+        return code;
+    }
+
 
     size_t length = 0;
     hypertext_Output_Response(instance, NULL, &length, false, false);
