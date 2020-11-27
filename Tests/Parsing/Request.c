@@ -25,7 +25,7 @@
 
 const char* example = "GET /index.html HTTP/1.0\nHost: www.example.org\nUser-Agent: hypertext-Example\n\nThis is an example body used to test the parser.";
 
-int main(int argc, char** argv)
+int main()
 {
     hypertext_Instance* instance = hypertext_New();
     if (instance == NULL)

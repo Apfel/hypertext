@@ -39,7 +39,9 @@ endif()
 
 if(MSVC)
     add_definitions(-DWIN32_LEAN_AND_MEAN -DUNICODE -D_CRT_SECURE_NO_WARNINGS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /permissive- /WX /Wv:18")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4 /WX")
+else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
 endif()
 
 set(SOURCES

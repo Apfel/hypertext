@@ -25,7 +25,7 @@
 
 const char* example = "HTTP/1.1 200 OK\nContent-Type: text\nContent-Length: 3\nConnection: close\n\n";
 
-int main(int argc, char** argv)
+int main()
 {
     hypertext_Instance* instance = hypertext_New();
     if (instance == NULL)

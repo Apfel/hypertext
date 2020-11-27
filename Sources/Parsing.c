@@ -54,16 +54,22 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
     free(methodstr);
     if (instance->method == UINT8_MAX) return hypertext_Result_Invalid_Method;
 
-    uint32_t pathlen = 1;
-    for (; pathlen != UINT32_MAX; pathlen++) if (input[methodlen + pathlen] ==  ' ' || input[methodlen + pathlen] == 0) break;
+    size_t pathlen = 1;
+    for (; pathlen != SIZE_MAX; pathlen++) if (input[methodlen + pathlen + 1] ==  ' ') break;
 
-    instance->path = calloc(1, sizeof(char) * pathlen);
-    for (int i = 0; i != pathlen - 1; i++) instance->path[i] = input[methodlen + i + 1];
+    instance->path = calloc(pathlen + 1, sizeof(char));
+    memcpy(instance->path, hypertext_utilities_cut_text(input, methodlen + 1, methodlen + pathlen), pathlen);
 
-    if (strcmp(hypertext_utilities_append_null(hypertext_utilities_cut_text(input, methodlen + pathlen + 1, methodlen + pathlen + 5), 5), "HTTP/") != 0) return hypertext_Result_Invalid_Parameters;
+    char* http_prefix = calloc(6, sizeof(char));
+    memcpy(http_prefix, hypertext_utilities_cut_text(input, methodlen + pathlen + 2, methodlen + pathlen + 7), 5);
+
+    int32_t result = strcmp(http_prefix, "HTTP/");
+    free(http_prefix);
+
+    if (result != 0) return hypertext_Result_Invalid_Parameters;
 
     char* ver_str = calloc(4, sizeof(char));
-    for (int i = 0; i != 3; i++) ver_str[i] = input[methodlen + pathlen + 6 + i];
+    memcpy(ver_str, hypertext_utilities_cut_text(input, methodlen + pathlen + 7, methodlen + pathlen + 10), 3);
 
     if      (strcmp(ver_str, "1.0") == 0) instance->version = hypertext_HTTP_Version_1_0;
     else if (strcmp(ver_str, "1.1") == 0) instance->version = hypertext_HTTP_Version_1_1;
@@ -75,7 +81,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
 
     free(ver_str);
 
-    size_t padding = methodlen + pathlen + 9;
+    size_t padding = methodlen + pathlen + 10;
     if (input[padding] == '\r') padding++;
 
     if (input[padding] != '\n') return hypertext_Result_Invalid_Parameters;
@@ -91,7 +97,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
         if (length > strlen(input) - offset) length = strlen(input) - offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
+        strcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length));
     }
 
     return hypertext_Result_Success;
@@ -104,21 +110,30 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
 
     instance->type = hypertext_Instance_Content_Type_Response;
 
-    if (strcmp(hypertext_utilities_append_null(hypertext_utilities_cut_text(input, 0, 5), 5), "HTTP/") != 0) return hypertext_Result_Invalid_Parameters;
+    char* http_prefix = calloc(6, sizeof(char));
+    memcpy(http_prefix, hypertext_utilities_cut_text(input, 0, 4), 5);
 
-    char* ver_str = calloc(4, sizeof(char));
-    for (int i = 0; i != 3; i++) ver_str[i] = input[5 + i];;
+    int32_t result = strcmp(http_prefix, "HTTP/");
+    free(http_prefix);
 
-    if      (strcmp(ver_str, "1.0") == 0) instance->version = hypertext_HTTP_Version_1_0;
-    else if (strcmp(ver_str, "1.1") == 0) instance->version = hypertext_HTTP_Version_1_1;
+    if (result != 0) return hypertext_Result_Invalid_Parameters;
+
+    char* val_str = calloc(4, sizeof(char));
+    memcpy(val_str, hypertext_utilities_cut_text(input, 5, 8), 3);
+
+    if      (strcmp(val_str, "1.0") == 0) instance->version = hypertext_HTTP_Version_1_0;
+    else if (strcmp(val_str, "1.1") == 0) instance->version = hypertext_HTTP_Version_1_1;
     else
     {
-        free(ver_str);
+        free(val_str);
         return hypertext_Result_Invalid_Version;
     }
 
-    char statusstr[4] = { input[9], input[10], input[11], 0 };
-    unsigned long status_int = strtoul(statusstr, NULL, 0);
+    memcpy(val_str, hypertext_utilities_cut_text(input, 9, 11), 3);
+    unsigned long status_int = strtoul(val_str, NULL, 0);
+    
+    free(val_str);
+
     if (status_int > UINT16_MAX || status_int < 100) return hypertext_Result_Invalid_Parameters;
 
     instance->code = (uint16_t)status_int;
