@@ -131,7 +131,7 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
 
     memcpy(val_str, hypertext_utilities_cut_text(input, 9, 11), 3);
     unsigned long status_int = strtoul(val_str, NULL, 0);
-    
+
     free(val_str);
 
     if (status_int > UINT16_MAX || status_int < 100) return hypertext_Result_Invalid_Parameters;

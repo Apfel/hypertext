@@ -57,7 +57,7 @@ int main()
 
     default:
         printf("An error occurred that isn't handled separately; code %d.\n", code);
-        break; 
+        break;
     }
 
     hypertext_Destroy(instance);

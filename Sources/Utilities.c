@@ -89,7 +89,7 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
 
     for (size_t i = 0; i != count; i++) memcpy(&fields[i], &i_fields[i], sizeof(i_fields[i]));
 
-    free(i_fields);    
+    free(i_fields);
 
     return padding + 1;
 }

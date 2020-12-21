@@ -50,7 +50,7 @@ typedef struct
 } hypertext_Header_Field;
 
 /// An instance stored as an opaque structure; contains any required data.
-typedef struct hypertext_Instance hypertext_Instance; 
+typedef struct hypertext_Instance hypertext_Instance;
 
 /// Different types of contents held within an instance.
 enum hypertext_Instance_Content_Type
@@ -84,11 +84,11 @@ enum hypertext_Result
     hypertext_Result_Success, /// No error occurred.
 
     /** \brief Invalid instance.
-     * 
-     * The supplied instance was already fed with data either via a creation or a parsing method. Use hypertext_destroy to destroy its contents.
-     * 
-     * \see hypertext_Destroy
-     */
+    *
+    * The supplied instance was already fed with data either via a creation or a parsing method. Use hypertext_destroy to destroy its contents.
+    *
+    * \see hypertext_Destroy
+    */
     hypertext_Result_Invalid_Instance,
 
     hypertext_Result_Invalid_Parameters, /// Invalid parameters were supplied; i.e the instance was NULL, the input contained invalid line endings, invalid format, version and so on.
@@ -102,9 +102,9 @@ enum hypertext_Result
 };
 
 /** \brief Different HTTP status codes.
- * 
+ *
  * Codes are always 3 digits long.
- * 
+ *
  * 1xx - Informational codes | 2xx - Successful codes | 3xx - Redirection | 4xx - Client Error | 5xx - Server error
  */
 enum hypertext_Status
@@ -165,7 +165,7 @@ enum hypertext_HTTP_Version
 };
 
 /** \brief Creates a new instance.
- * 
+ *
  * \return Returns NULL if an error occurred; otherwise it'll be a usable instance.
  */
 hypertext_EXPORT hypertext_Instance* hypertext_New();
@@ -174,7 +174,7 @@ hypertext_EXPORT hypertext_Instance* hypertext_New();
 hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
 
 /** \brief Initializes the instance as a new request.
- * 
+ *
  * \param instance The instance to use.
  * \param method The method used in the request.
  * \param path The absolute path to the file.
@@ -184,17 +184,17 @@ hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
  * \param field_count The field count.
  * \param body The body's content.
  * \param body_length The body's length.
- * 
+ *
  * \note If any length is set to 0, the respective value will be skipped.
  * \note field_count must be the amount of fields, not the size of a field array.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, uint8_t version, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Initializes the instance as a new request.
- * 
+ *
  * \param instance The instance to use.
  * \param version The HTTP version this request supports.
  * \param code The response code.
@@ -202,73 +202,73 @@ hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, 
  * \param field_count The field count.
  * \param body The body's content.
  * \param body_length The body's length.
- * 
+ *
  * \note If any length is set to 0, the respective value will be skipped.
  * \note field_count must be the amount of fields, not the size of a field array.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Parses a raw request coming from a UTF-8 character array.
- * 
+ *
  * \param instance The instance to use.
  * \param input The input character array to parse.
  * \param length The maximum length to parse if a null terminator isn't met before the set length.
- * 
+ *
  * \note The length counts the amount of letters and not the length of the body in bytes.
  * \note The length only applies to the body.
  * \note Set length to 0 to parse until a null terminator is met.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Parses a raw response coming from a UTF-8 character array.
- * 
+ *
  * \param instance The instance to use.
  * \param input The input character array to parse.
  * \param length The maximum length to parse if a null terminator isn't met before the set length.
- * 
+ *
  * \note The length counts the amount of letters and not the length of the body in bytes.
  * \note The length only applies to the body.
  * \note Set length to 0 to parse until a null terminator is met.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Takes the request contents stored within the instance and pushes it into "output".
- * 
+ *
  * \param instance The instance to use.
  * \param output The output variable.
  * \param length The maximum length to parse if a null terminator isn't met before the set length.
  * \param keep_compat Whether to keep full compatibility with the HTTP standard, RFC 2616, or to reduce size by skipping some values set in place.
- * 
+ *
  * \note output can be null.
  * \note length cannot be null.
  * \note if keep_compat is false, only a linefeed will be used, instead of a carriage return followed a linefeed.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
 hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat);
 
 /** \brief Takes the response contents stored within the instance and pushes it into "output".
- * 
+ *
  * \param instance The instance to use.
  * \param output The output variable.
  * \param length The maximum length to parse if a null terminator isn't met before the set length.
  * \param keep_desc Whether to add the description for the status code or not. hypertext doesn't need this during parsing, so this might save some bandwidth.
  * \param keep_compat Whether to keep full compatibility with the HTTP standard, RFC 2616, or to reduce size by skipping some values set in place.
- * 
+ *
  * \note output can be null.
  * \note length cannot be null.
  * \note if keep_compat is false, only a linefeed will be used, instead of a carriage return followed a linefeed.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -277,7 +277,7 @@ hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance,
 /** \brief Adds a header field to the instance.
  * \param instance The instance to use.
  * \param input The header field to add.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -286,7 +286,7 @@ hypertext_EXPORT uint8_t hypertext_Add_Field(hypertext_Instance* instance, hyper
 /** \brief Removes a header field from the instance.
  * \param instance The instance to use.
  * \param input The name of the field to remove.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -295,7 +295,7 @@ hypertext_EXPORT uint8_t hypertext_Remove_Field(hypertext_Instance* instance, co
 /** \brief Returns the request's method.
  * \param instance The instance to use.
  * \param output The output variable.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -305,9 +305,9 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, ui
  * \param instance The instance to use.
  * \param output The output variable.
  * \param length The length of the body to return or to process.
- * 
+ *
  * \note If output is NULL, the length will be overwritten. Use this to fetch the length.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -316,7 +316,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char
 /** \brief Returns the used version of the response/request stored inside.
  * \param instance The instance to use.
  * \param output The output variable.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -325,7 +325,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, u
 /** \brief Returns the response's return code.
  * \param instance The instance to use.
  * \param output The output variable.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -354,9 +354,9 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field_Count(hypertext_Instance* 
  * \param instance The instance to use.
  * \param output The output variable.
  * \param length The length of the body to return or to process.
- * 
+ *
  * \note If output is NULL, the length will be overwritten. Use this to fetch the length.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -366,9 +366,9 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char
  * \param instance The instance to use.
  * \param body The body to use.
  * \param length The length of the body to use.
- * 
+ *
  * \note The body cannot be NULL and the length must be greater than 0.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -377,7 +377,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Body(hypertext_Instance* instance, const 
 /** \brief Sets the response code.
  * \param instance The instance to use.
  * \param code The code to set.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -386,7 +386,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Code(hypertext_Instance* instance, uint16
 /** \brief Sets the request method.
  * \param instance The instance to use.
  * \param method The method to set.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -396,9 +396,9 @@ hypertext_EXPORT uint8_t hypertext_Set_Method(hypertext_Instance* instance, uint
  * \param instance The instance to use.
  * \param path The path to set.
  * \param length The length of the body to return or to process.
- * 
+ *
  * \note The body cannot be NULL and the length must be greater than 0.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */
@@ -407,7 +407,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Path(hypertext_Instance* instance, const 
 /** \brief Sets the version for this instance.
  * \param instance The instance to use.
  * \param version The version to support.
- * 
+ *
  * \return A normal return code.
  * \sa hypertext_Result.
  */

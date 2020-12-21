@@ -49,7 +49,7 @@ set(SOURCES
 
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Internals.h
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Utilities.h
-    
+
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Creation.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Fetching.c
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Instance.c

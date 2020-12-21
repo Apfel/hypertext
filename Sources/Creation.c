@@ -33,7 +33,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
     instance->type = hypertext_Instance_Content_Type_Request;
 
     instance->method = method;
-    
+
     instance->path = calloc(path_length + 1, sizeof(char));
     memcpy(instance->path, path, path_length * sizeof(char));
 

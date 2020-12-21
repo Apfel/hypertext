@@ -36,7 +36,7 @@ hypertext_Instance* hypertext_New()
 void hypertext_Destroy(hypertext_Instance* instance)
 {
     if (instance == NULL) return;
-    
+
     instance->code          = 0;
     instance->field_count   = 0;
     instance->method        = hypertext_Method_Unknown;
