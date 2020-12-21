@@ -58,7 +58,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
     for (; pathlen != SIZE_MAX; pathlen++) if (input[methodlen + pathlen + 1] ==  ' ') break;
 
     instance->path = calloc(pathlen + 1, sizeof(char));
-    memcpy(instance->path, hypertext_utilities_cut_text(input, methodlen + 1, methodlen + pathlen), pathlen);
+    memcpy(instance->path, hypertext_utilities_cut_text(input, methodlen + 1, methodlen + pathlen + 1), pathlen);
 
     char* http_prefix = calloc(6, sizeof(char));
     memcpy(http_prefix, hypertext_utilities_cut_text(input, methodlen + pathlen + 2, methodlen + pathlen + 7), 5);
