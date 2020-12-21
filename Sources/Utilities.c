@@ -49,14 +49,11 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
         size_t key_length = 0, value_padding = 1, value_length = 0;
 
         while (input[padding + key_length] != ':') key_length++;
-
-        if (input[key_length + value_padding] == ' ') value_padding++;
+        if (input[padding + key_length + value_padding] == ' ') value_padding++;
 
         while (true)
         {
-            if (input[padding + key_length + value_padding + value_length] == '\n') break;
-            if (input[padding + key_length + value_padding + value_length] == '\r' && input[padding + key_length + value_padding + value_length + 1] == '\n') break;
-
+            if (input[padding + key_length + value_padding + value_length] == '\n' || (input[padding + key_length + value_padding + value_length] == '\r' && input[padding + key_length + value_padding + value_length + 1] == '\n')) break;
             value_length++;
         }
 
@@ -70,8 +67,8 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
                 .value  = calloc(value_length + 1, sizeof(char))
             };
 
-            memcpy((char*)field.key, hypertext_utilities_cut_text(input, padding, padding + key_length), key_length * sizeof(char));
-            memcpy((char*)field.value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length * sizeof(char));
+            memcpy((char*)field.key, hypertext_utilities_cut_text(input, padding, padding + key_length), key_length);
+            memcpy((char*)field.value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length);
 
             memcpy(&i_fields[count], &field, sizeof(field));
         }

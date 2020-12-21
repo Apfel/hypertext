@@ -73,7 +73,7 @@ uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Hea
     if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
     else if (output == NULL || key_name == NULL) return hypertext_Result_Invalid_Parameters;
 
-    for (size_t i = 0; i != instance->field_count; i++) if (instance->fields[i].key == key_name)
+    for (size_t i = 0; i != instance->field_count; i++) if (strcmp(instance->fields[i].key, key_name) == 0)
     {
         memcpy(output, &instance->fields[i], sizeof(hypertext_Header_Field));
         return hypertext_Result_Success;
