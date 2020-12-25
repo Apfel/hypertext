@@ -70,8 +70,8 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version,
     {
         if (fields == NULL) return hypertext_Result_Invalid_Parameters;
 
-        instance->field_count = field_count;
-        instance->fields = calloc(field_count, sizeof(hypertext_Header_Field));
+        instance->field_count   = field_count;
+        instance->fields        = calloc(field_count, sizeof(hypertext_Header_Field));
         memcpy(instance->fields, fields, sizeof(hypertext_Header_Field) * field_count);
     }
 
