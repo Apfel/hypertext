@@ -70,7 +70,6 @@ int main()
 
     if (strcmp(example, output) != 0) printf("Warning: hypertext_Output_Request returned data that isn't the same as the input.\n");
 
-    free(output);
     hypertext_Destroy(instance);
     free(instance);
 
