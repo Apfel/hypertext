@@ -300,7 +300,7 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
     size_t out_len = 13 + (keep_desc ? strlen(description) : 0);
     if (keep_compat) out_len++;
 
-    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++)
+    if (instance->field_count != 0 && instance->fields != NULL) for (size_t i = 0; i != instance->field_count; i++)
     {
         out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + 2;
         if (keep_compat) out_len += 2;
