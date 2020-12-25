@@ -65,6 +65,7 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version,
     else if (code == hypertext_Status_Unknown || code >= hypertext_Status_Max || version == hypertext_HTTP_Version_Unknown || version >= hypertext_HTTP_Version_Max) return hypertext_Result_Invalid_Parameters;
 
     instance->type = hypertext_Instance_Content_Type_Response;
+    instance->code = code;
 
     if (field_count != 0)
     {
