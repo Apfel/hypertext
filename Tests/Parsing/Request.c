@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char* example = "GET /index.html HTTP/1.0\nHost: www.example.org\nUser-Agent: hypertext-Example\n\nThis is an example body used to test the parser.";
+const char* example = "GET /index.html HTTP/1.0\r\nHost: www.example.org\r\nUser-Agent: hypertext-Example\r\n\r\nThis is an example body used to test the parser.";
 
 int main()
 {
@@ -34,11 +34,10 @@ int main()
         return 1;
     }
 
-    uint8_t code = hypertext_Parse_Request(instance, example, 50);
+    uint8_t code = hypertext_Parse_Request(instance, example, 48);
     switch (code)
     {
     case hypertext_Result_Success:
-        code = 0;
         printf("Success.\n");
         break;
 
@@ -63,10 +62,10 @@ int main()
     }
 
     size_t length = 0;
-    hypertext_Output_Request(instance, NULL, &length, false);
+    hypertext_Output_Request(instance, NULL, &length, true);
 
     char* output = calloc(length + 1, sizeof(char));
-    hypertext_Output_Request(instance, output, &length, false);
+    hypertext_Output_Request(instance, output, &length, true);
 
     if (strcmp(example, output) != 0) printf("Warning: hypertext_Output_Request returned data that isn't the same as the input.\n");
 

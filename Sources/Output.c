@@ -29,54 +29,49 @@
 uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
-    else if (output == NULL || length == NULL) return hypertext_Result_Invalid_Parameters;
+    else if (length == NULL) return hypertext_Result_Invalid_Parameters;
 
     char* method_str = calloc(9, sizeof(char));
     switch (instance->method)
     {
     case hypertext_Method_OPTIONS:
-        snprintf(method_str, 8, "OPTIONS");
+        snprintf(method_str, 9, "OPTIONS");
         break;
 
     case hypertext_Method_GET:
-        snprintf(method_str, 8, "GET");
+        snprintf(method_str, 9, "GET");
         break;
 
     case hypertext_Method_HEAD:
-        snprintf(method_str, 8, "HEAD");
+        snprintf(method_str, 9, "HEAD");
         break;
 
     case hypertext_Method_POST:
-        snprintf(method_str, 8, "POST");
+        snprintf(method_str, 9, "POST");
         break;
 
     case hypertext_Method_PUT:
-        snprintf(method_str, 8, "PUT");
+        snprintf(method_str, 9, "PUT");
         break;
 
     case hypertext_Method_DELETE:
-        snprintf(method_str, 8, "DELETE");
+        snprintf(method_str, 9, "DELETE");
         break;
 
     case hypertext_Method_TRACE:
-        snprintf(method_str, 8, "TRACE");
+        snprintf(method_str, 9, "TRACE");
         break;
 
     case hypertext_Method_CONNECT:
-        snprintf(method_str, 8, "CONNECT");
+        snprintf(method_str, 9, "CONNECT");
         break;
     }
 
-    size_t out_len = strlen(method_str) + strlen(instance->path) + 12;
-    if (keep_compat) out_len++;
+    size_t out_len = strlen(method_str) + strlen(instance->path) + (keep_compat ? 12 : 11);
 
-    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++)
-    {
-        out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + 2;
-        if (keep_compat) out_len += 2;
-    }
+    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
 
-    out_len += keep_compat ? 3 : 2;
+    out_len += keep_compat ? 2 : 1;
 
     if (instance->body != NULL) out_len += strlen(instance->body);
 
@@ -88,7 +83,8 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
         char* out_str = calloc(out_len + 1, sizeof(char));
 
         char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
-        keep_compat ? snprintf(term, 3, "\r\n") : snprintf(term, 2, "\n");
+        if (keep_compat) snprintf(term, 3, "\r\n");
+        else snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
@@ -103,15 +99,15 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
             break;
         }
 
-        snprintf(out_str, out_len, "%s %s HTTP/%s%s", method_str, instance->path, ver_str, term);
+        snprintf(out_str, out_len + 1, "%s %s HTTP/%s%s", method_str, instance->path, ver_str, term);
 
-        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
+        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len + 1, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
 
-        snprintf(out_str, out_len, "%s%s", out_str, term);
+        snprintf(out_str, out_len + 1, "%s%s", out_str, term);
 
-        if (instance->body != NULL) snprintf(out_str, out_len, "%s%s", out_str, instance->body);
+        if (instance->body != NULL) snprintf(out_str, out_len + 1, "%s%s", out_str, instance->body);
 
-        memcpy(output, out_str, out_len);
+        memcpy(output, out_str, sizeof(char) * out_len);
 
         free(ver_str);
         free(term);
@@ -297,16 +293,11 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
         }
     }
 
-    size_t out_len = 13 + (keep_desc ? strlen(description) : 0);
-    if (keep_compat) out_len++;
+    size_t out_len = (keep_desc ? strlen(description) : 0) + 15 + (keep_compat ? 2 : 1);
 
-    if (instance->field_count != 0 && instance->fields != NULL) for (size_t i = 0; i != instance->field_count; i++)
-    {
-        out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + 2;
-        if (keep_compat) out_len += 2;
-    }
+    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
 
-    out_len += keep_compat ? 3 : 2;
+    out_len += keep_compat ? 2 : 1;
 
     if (instance->body != NULL) out_len += strlen(instance->body);
 
@@ -318,7 +309,8 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
         char* out_str = calloc(out_len + 1, sizeof(char));
 
         char* term = calloc((keep_compat ? 3 : 2), sizeof(char));
-        keep_compat ? snprintf(term, 3, "\r\n") : snprintf(term, 2, "\n");
+        if (keep_compat) snprintf(term, 3, "\r\n");
+        else snprintf(term, 2, "\n");
 
         char* ver_str = calloc(4, sizeof(char));
 
@@ -333,18 +325,18 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
             break;
         }
 
-        snprintf(out_str, out_len, "HTTP/%s %d", ver_str, instance->code);
-        if (keep_desc) snprintf(out_str, out_len, "%s %s ", out_str, description);
+        snprintf(out_str, out_len + 1, "HTTP/%s %d", ver_str, instance->code);
+        if (keep_desc) snprintf(out_str, out_len + 1, "%s %s", out_str, description);
 
-        snprintf(out_str, out_len, "%s%s", out_str, term);
+        snprintf(out_str, out_len + 1, "%s%s", out_str, term);
 
-        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
+        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len + 1, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
 
-        snprintf(out_str, out_len, "%s%s", out_str, term);
+        snprintf(out_str, out_len + 1, "%s%s", out_str, term);
 
-        if (instance->body != NULL && strlen(instance->body) > 0) snprintf(out_str, out_len, "%s%s", out_str, instance->body);
+        if (instance->body != NULL && strlen(instance->body) > 0) snprintf(out_str, out_len + 1, "%s%s", out_str, instance->body);
 
-        memcpy(output, out_str, out_len);
+        memcpy(output, out_str, sizeof(char) * out_len);
 
         free(ver_str);
         free(term);

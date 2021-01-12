@@ -97,7 +97,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
         if (length > strlen(input) - offset) length = strlen(input) - offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        strcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length));
+        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset + 1, padding + offset + length), sizeof(char) * length);
     }
 
     return hypertext_Result_Success;

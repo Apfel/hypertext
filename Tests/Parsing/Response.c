@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 
-const char* example = "HTTP/1.1 200 OK\nContent-Type: text\nContent-Length: 3\nConnection: close\n\n";
+const char* example = "HTTP/1.1 200 OK\r\nContent-Type: text\r\nContent-Length: 3\r\nConnection: close\r\n\r\n";
 
 int main()
 {
@@ -34,7 +34,7 @@ int main()
         return 1;
     }
 
-    uint8_t code = hypertext_Parse_Response(instance, example, 50);
+    uint8_t code = hypertext_Parse_Response(instance, example, 0);
     switch (code)
     {
     case hypertext_Result_Success:
@@ -57,12 +57,11 @@ int main()
         return code;
     }
 
-
     size_t length = 0;
-    hypertext_Output_Response(instance, NULL, &length, false, false);
+    hypertext_Output_Response(instance, NULL, &length, true, true);
 
     char* output = calloc(length + 1, sizeof(char));
-    hypertext_Output_Response(instance, output, &length, false, false);
+    hypertext_Output_Response(instance, output, &length, true, true);
 
     if (strcmp(example, output) != 0) printf("Warning: hypertext_Output_Response returned data that isn't the same as the input.\n");
 
