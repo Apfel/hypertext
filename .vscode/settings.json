@@ -1,6 +1,5 @@
 {
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "cSpell.allowCompoundWords": true,
     "cmake.buildDirectory": "${workspaceFolder}/Build",
     "cmake.configureArgs": [ "-DBUILD_TESTS=ON", "-DBUILD_SHARED=ON" ],
     "files.associations": {

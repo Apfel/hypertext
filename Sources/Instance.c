@@ -43,7 +43,7 @@ void hypertext_Destroy(hypertext_Instance* instance)
     instance->version       = 0;
     instance->type          = hypertext_Instance_Content_Type_Unknown;
 
-    if (instance->body      != NULL) instance->body     = NULL;
-    if (instance->fields    != NULL) instance->fields   = NULL;
-    if (instance->path      != NULL) instance->path     = NULL;
+    if (instance->body      != NULL) free(instance->body);
+    if (instance->fields    != NULL) free(instance->fields);
+    if (instance->path      != NULL) free(instance->path);
 }

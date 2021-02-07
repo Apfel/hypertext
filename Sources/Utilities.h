@@ -22,7 +22,7 @@
 
 #include <hypertext.h>
 
-char* hypertext_utilities_cut_text(const char* text, size_t start, size_t end);
+const char* hypertext_utilities_cut_text(const char* text, size_t start, size_t end);
 size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Field* fields, size_t* field_count);
 
 #endif

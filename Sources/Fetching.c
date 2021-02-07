@@ -109,3 +109,13 @@ uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t*
 
     return hypertext_Result_Success;
 }
+
+uint8_t hypertext_Fetch_Type(hypertext_Instance* instance, uint8_t* type)
+{
+    if (instance == NULL) return hypertext_Result_Invalid_Instance;
+    else if (type == NULL) return hypertext_Result_Invalid_Parameters;
+
+    memcpy(type, &instance->type, sizeof(uint8_t));
+
+    return hypertext_Result_Success;
+}

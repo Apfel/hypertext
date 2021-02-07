@@ -87,17 +87,21 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
     if (input[padding] != '\n') return hypertext_Result_Invalid_Parameters;
 
     padding++;
-    if (hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), NULL, &instance->field_count) == 0) return hypertext_Result_Invalid_Parameters;
-    instance->fields = calloc(instance->field_count, sizeof(hypertext_Header_Field));
 
-    int64_t offset = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
-    if (offset == 0) return hypertext_Result_Invalid_Parameters;
+    size_t header_offset    = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), NULL, &instance->field_count);
+    size_t body_offset      = 0;
+    if (header_offset != 0)
+    {
+        instance->fields    = calloc(instance->field_count, sizeof(hypertext_Header_Field));
+        body_offset         = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
+    }
+
     if (length != 0)
     {
-        if (length > strlen(input) - offset) length = strlen(input) - offset;
+        if (length > strlen(input) - body_offset) length = strlen(input) - body_offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset + 1, padding + offset + length), sizeof(char) * length);
+        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + body_offset + 1, padding + body_offset + length), sizeof(char) * length);
     }
 
     return hypertext_Result_Success;
@@ -111,7 +115,7 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
     instance->type = hypertext_Instance_Content_Type_Response;
 
     char* http_prefix = calloc(6, sizeof(char));
-    memcpy(http_prefix, hypertext_utilities_cut_text(input, 0, 4), 5);
+    memcpy(http_prefix, hypertext_utilities_cut_text(input, 0, 5), 5);
 
     int32_t result = strcmp(http_prefix, "HTTP/");
     free(http_prefix);
@@ -129,11 +133,9 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
         return hypertext_Result_Invalid_Version;
     }
 
-    memcpy(val_str, hypertext_utilities_cut_text(input, 9, 11), 3);
+    memcpy(val_str, hypertext_utilities_cut_text(input, 9, 12), 3);
     unsigned long status_int = strtoul(val_str, NULL, 0);
-
     free(val_str);
-
     if (status_int > UINT16_MAX || status_int < 100) return hypertext_Result_Invalid_Parameters;
 
     instance->code = (uint16_t)status_int;
@@ -149,17 +151,20 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
         }
     }
 
-    if (hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), NULL, &instance->field_count) == 0) return hypertext_Result_Invalid_Parameters;
-    instance->fields = calloc(instance->field_count, sizeof(hypertext_Header_Field));
+    size_t header_offset    = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), NULL, &instance->field_count);
+    size_t body_offset      = 0;
+    if (header_offset != 0)
+    {
+        instance->fields = calloc(instance->field_count, sizeof(hypertext_Header_Field));
+        body_offset = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
+    }
 
-    int64_t offset = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
-    if (offset == 0) return hypertext_Result_Invalid_Parameters;
     if (length != 0)
     {
-        if (length > strlen(input) - offset) length = strlen(input) - offset;
+        if (length > strlen(input) - body_offset) length = strlen(input) - body_offset;
 
         instance->body = calloc(length + 1, sizeof(char));
-        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + offset, padding + offset + length), length);
+        memcpy(instance->body, hypertext_utilities_cut_text(input, padding + body_offset, padding + body_offset + length), length);
     }
 
     return hypertext_Result_Success;

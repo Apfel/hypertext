@@ -3,7 +3,6 @@
         "ms-vscode.cpptools",
         "twxs.cmake",
         "ms-vscode.cmake-tools",
-        "editorconfig.editorconfig",
-        "streetsidesoftware.code-spell-checker"
+        "editorconfig.editorconfig"
     ]
 }

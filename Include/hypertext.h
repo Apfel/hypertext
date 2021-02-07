@@ -1,4 +1,4 @@
-// Copyright (c) 2020 The hypertext authors.
+// Copyright (c) 2020 Apfel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,10 @@ extern "C"
 
 #if defined(_WIN32)
 #define hypertext_EXPORT __declspec(dllexport)
+#define hypertext_API __stdcall
 #elif defined(__GNUC__) || defined(COMPILER_GCC) || defined(__APPLE__)
 #define hypertext_EXPORT __attribute__((visibility("default")))
+#define hypertext_API __stdcall
 #else
 #error "Your compiler and/or platform might not be supported."
 #endif
@@ -45,8 +47,8 @@ extern "C"
 /// A normal header field.
 typedef struct
 {
-    const char* key; /// The key (name) for this field. Should be capitalized.
-    const char* value; /// The value of this field. It must not contain newlines.
+    char* key; /// The key (name) for this field. Should be capitalized.
+    char* value; /// The value of this field. It must not contain newlines.
 } hypertext_Header_Field;
 
 /// An instance stored as an opaque structure; contains any required data.
@@ -168,10 +170,10 @@ enum hypertext_HTTP_Version
  *
  * \return Returns NULL if an error occurred; otherwise it'll be a usable instance.
  */
-hypertext_EXPORT hypertext_Instance* hypertext_New();
+hypertext_EXPORT hypertext_Instance* hypertext_API hypertext_New();
 
-/// Destroys the instance's content. Useful in order to re-use a cleaned instance for a new request or response.
-hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
+/// Destroys the instance's content. Use this to reset the instance.
+hypertext_EXPORT void hypertext_API hypertext_Destroy(hypertext_Instance* instance);
 
 /** \brief Initializes the instance as a new request.
  *
@@ -191,7 +193,7 @@ hypertext_EXPORT void hypertext_Destroy(hypertext_Instance* instance);
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, uint8_t version, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, const char* path, size_t path_length, uint8_t version, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Initializes the instance as a new request.
  *
@@ -209,7 +211,7 @@ hypertext_EXPORT uint8_t hypertext_Create_Request(hypertext_Instance* instance, 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Create_Response(hypertext_Instance* instance, uint8_t version, uint16_t code, hypertext_Header_Field* fields, size_t field_count, const char* body, size_t body_length);
 
 /** \brief Parses a raw request coming from a UTF-8 character array.
  *
@@ -224,7 +226,7 @@ hypertext_EXPORT uint8_t hypertext_Create_Response(hypertext_Instance* instance,
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input, size_t length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Request(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Parses a raw response coming from a UTF-8 character array.
  *
@@ -239,7 +241,7 @@ hypertext_EXPORT uint8_t hypertext_Parse_Request(hypertext_Instance* instance, c
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Parse_Response(hypertext_Instance* instance, const char* input, size_t length);
 
 /** \brief Takes the request contents stored within the instance and pushes it into "output".
  *
@@ -255,7 +257,7 @@ hypertext_EXPORT uint8_t hypertext_Parse_Response(hypertext_Instance* instance, 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Output_Request(hypertext_Instance* instance, char* output, size_t* length, bool keep_compat);
 
 /** \brief Takes the response contents stored within the instance and pushes it into "output".
  *
@@ -272,7 +274,7 @@ hypertext_EXPORT uint8_t hypertext_Output_Request(hypertext_Instance* instance, 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Output_Response(hypertext_Instance* instance, char* output, size_t* length, bool keep_desc, bool keep_compat);
 
 /** \brief Adds a header field to the instance.
  * \param instance The instance to use.
@@ -281,7 +283,7 @@ hypertext_EXPORT uint8_t hypertext_Output_Response(hypertext_Instance* instance,
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Add_Field(hypertext_Instance* instance, hypertext_Header_Field* input);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Add_Field(hypertext_Instance* instance, hypertext_Header_Field* input);
 
 /** \brief Removes a header field from the instance.
  * \param instance The instance to use.
@@ -290,7 +292,7 @@ hypertext_EXPORT uint8_t hypertext_Add_Field(hypertext_Instance* instance, hyper
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Remove_Field(hypertext_Instance* instance, const char* input);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Remove_Field(hypertext_Instance* instance, const char* input);
 
 /** \brief Returns the request's method.
  * \param instance The instance to use.
@@ -299,7 +301,7 @@ hypertext_EXPORT uint8_t hypertext_Remove_Field(hypertext_Instance* instance, co
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output);
 
 /** \brief Returns the request's path.
  * \param instance The instance to use.
@@ -311,7 +313,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, ui
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t* length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t* length);
 
 /** \brief Returns the used version of the response/request stored inside.
  * \param instance The instance to use.
@@ -320,7 +322,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output);
 
 /** \brief Returns the response's return code.
  * \param instance The instance to use.
@@ -329,7 +331,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, u
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint16_t* output);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Code(hypertext_Instance* instance, uint16_t* output);
 
 /** \brief Fetches a header field based on its key.
  * \param instance The instance to use.
@@ -339,7 +341,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name);
 
 /** \brief Returns the amount of header fields.
  * \param instance The instance to use.
@@ -348,7 +350,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instan
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field_Count(hypertext_Instance* instance, size_t* count);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Header_Field_Count(hypertext_Instance* instance, size_t* count);
 
 /** \brief Returns the body of the request/response.
  * \param instance The instance to use.
@@ -360,7 +362,16 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Header_Field_Count(hypertext_Instance* 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t* length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Body(hypertext_Instance* instance, char* output, size_t* length);
+
+/** \brief Returns the internal type of the instance.
+ * \param instance The instance to use.
+ * \param type The output variable.
+ *
+ * \return A normal return code.
+ * \sa hypertext_Result.
+ */
+hypertext_EXPORT uint8_t hypertext_API hypertext_Fetch_Type(hypertext_Instance* instance, uint8_t* type);
 
 /** \brief Sets a new body.
  * \param instance The instance to use.
@@ -372,7 +383,7 @@ hypertext_EXPORT uint8_t hypertext_Fetch_Body(hypertext_Instance* instance, char
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Set_Body(hypertext_Instance* instance, const char* body, size_t length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Set_Body(hypertext_Instance* instance, const char* body, size_t length);
 
 /** \brief Sets the response code.
  * \param instance The instance to use.
@@ -381,7 +392,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Body(hypertext_Instance* instance, const 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Set_Code(hypertext_Instance* instance, uint16_t code);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Set_Code(hypertext_Instance* instance, uint16_t code);
 
 /** \brief Sets the request method.
  * \param instance The instance to use.
@@ -390,7 +401,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Code(hypertext_Instance* instance, uint16
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Set_Method(hypertext_Instance* instance, uint8_t method);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Set_Method(hypertext_Instance* instance, uint8_t method);
 
 /** \brief Sets the path for this request.
  * \param instance The instance to use.
@@ -402,7 +413,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Method(hypertext_Instance* instance, uint
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Set_Path(hypertext_Instance* instance, const char* path, size_t length);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Set_Path(hypertext_Instance* instance, const char* path, size_t length);
 
 /** \brief Sets the version for this instance.
  * \param instance The instance to use.
@@ -411,7 +422,7 @@ hypertext_EXPORT uint8_t hypertext_Set_Path(hypertext_Instance* instance, const 
  * \return A normal return code.
  * \sa hypertext_Result.
  */
-hypertext_EXPORT uint8_t hypertext_Set_Version(hypertext_Instance* instance, uint8_t version);
+hypertext_EXPORT uint8_t hypertext_API hypertext_Set_Version(hypertext_Instance* instance, uint8_t version);
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char* example = "GET /index.html HTTP/1.0\r\nHost: www.example.org\r\nUser-Agent: hypertext-Example\r\n\r\nThis is an example body used to test the parser.";
+const char* example = "GET /index.html HTTP/1.0\r\nHost: www.example.org\r\nUser-Agent: hypertext-Example\r\nExample: test\r\nExample: test 2\r\n\r\nThis is an example body used to test the parser.";
 
 int main()
 {
@@ -67,7 +67,7 @@ int main()
     char* output = calloc(length + 1, sizeof(char));
     hypertext_Output_Request(instance, output, &length, true);
 
-    if (strcmp(example, output) != 0) printf("Warning: hypertext_Output_Request returned data that isn't the same as the input.\n");
+    if (strcmp(example, output) == 0) printf("Warning: hypertext_Output_Request that's the same as the input.\n");
 
     hypertext_Destroy(instance);
     free(instance);
