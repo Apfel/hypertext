@@ -36,10 +36,10 @@ extern "C"
 
 #if defined(_WIN32)
 #define hypertext_EXPORT __declspec(dllexport)
-#define hypertext_API __stdcall
+#define hypertext_API __cdecl
 #elif defined(__GNUC__) || defined(COMPILER_GCC) || defined(__APPLE__)
 #define hypertext_EXPORT __attribute__((visibility("default")))
-#define hypertext_API __stdcall
+#define hypertext_API
 #else
 #error "Your compiler and/or platform might not be supported."
 #endif

@@ -18,7 +18,9 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 3.12.0)
-project(hypertext C)
+project(hypertext LANGUAGES C VERSION 1.0.3)
+
+include(CMakePackageConfigHelpers)
 
 option(BUILD_SHARED "Builds hypertext as a shared library." OFF)
 option(BUILD_TESTS  "Builds tests for hypertext."           OFF)
@@ -37,28 +39,6 @@ else()
     message("-- > Tests disabled.")
 endif()
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/Include)
-
-if(MSVC)
-    add_compile_definitions(
-        "WIN32_LEAN_AND_MEAN"
-        "UNICODE"
-        "_CRT_SECURE_NO_WARNINGS"
-    )
-
-    add_compile_options(
-        "/W4"
-        "/WX"
-    )
-else()
-    add_compile_options(
-        "-Wall"
-        "-Werror"
-        "-Wno-error=restrict"
-        "-Wno-restrict"
-    )
-endif()
-
 add_library(hypertext ${BUILD_MODE}
     ${CMAKE_CURRENT_LIST_DIR}/Include/hypertext.h
 
@@ -74,16 +54,47 @@ add_library(hypertext ${BUILD_MODE}
     ${CMAKE_CURRENT_LIST_DIR}/Sources/Utilities.c
 )
 
-if(BUILD_SHARED)
-    if(MSVC)
-        target_sources(hypertext PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Sources/Windows/Manifest.rc)
-    endif()
-
-    install(TARGETS hypertext RUNTIME DESTINATION bin)
+if(MSVC)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Windows/Manifest.rc.in ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc @ONLY NEWLINE_STYLE LF)
 endif()
 
-install(TARGETS hypertext ARCHIVE DESTINATION lib)
+if(MSVC)
+    target_compile_definitions(hypertext
+        PRIVATE "WIN32_LEAN_AND_MEAN"
+        PRIVATE "UNICODE"
+        PRIVATE "_CRT_SECURE_NO_WARNINGS"
+    )
+
+    target_compile_options(hypertext
+        PRIVATE "/W4"
+        PRIVATE "/WX"
+    )
+else()
+    target_compile_options(hypertext
+        PRIVATE "-Wall"
+        PRIVATE "-Werror"
+        PRIVATE "-Wno-error=restrict"
+        PRIVATE "-Wno-restrict"
+        PRIVATE "-Wno-attributes"
+    )
+endif()
+
+target_include_directories(hypertext PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Include>)
+
+if(BUILD_SHARED AND MSVC)
+    target_sources(hypertext PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
+endif()
+
+export(PACKAGE hypertext)
+
+install(TARGETS hypertext EXPORT hypertextTargets LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin INCLUDES DESTINATION include)
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/Include/hypertext.h DESTINATION include)
+
+configure_file(CMake/hypertextConfig.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/hypertextConfig.cmake" COPYONLY)
+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/hypertextConfigVersion.cmake" VERSION "${hypertext_VERSION_MAJOR}.${hypertext_VERSION_MINOR}.${hypertext_VERSION_PATCH}" COMPATIBILITY AnyNewerVersion)
+
+install(EXPORT hypertextTargets FILE hypertextTargets.cmake DESTINATION lib/cmake/hypertext)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/hypertextConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/hypertextConfigVersion.cmake" DESTINATION lib/cmake/hypertext)
 
 if(BUILD_TESTS)
     enable_testing()
@@ -91,32 +102,32 @@ if(BUILD_TESTS)
     project(hypertext_test_response_creation C)
     add_executable(hypertext_test_response_creation ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Response.c)
     if(MSVC)
-        target_sources(hypertext_test_response_creation PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Sources/Windows/Manifest.rc)
+        target_sources(hypertext_test_response_creation PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
-    target_link_libraries(hypertext_test_response_creation PUBLIC hypertext)
+    target_link_libraries(hypertext_test_response_creation PRIVATE hypertext)
     add_test(hypertext hypertext_test_response_creation)
 
     project(hypertext_test_request_creation C)
     add_executable(hypertext_test_request_creation ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Request.c)
     if(MSVC)
-        target_sources(hypertext_test_request_creation PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Sources/Windows/Manifest.rc)
+        target_sources(hypertext_test_request_creation PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
-    target_link_libraries(hypertext_test_request_creation PUBLIC hypertext)
+    target_link_libraries(hypertext_test_request_creation PRIVATE hypertext)
     add_test(hypertext hypertext_test_request_creation)
 
     project(hypertext_test_response_parsing C)
     add_executable(hypertext_test_response_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Response.c)
     if(MSVC)
-        target_sources(hypertext_test_response_parsing PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Sources/Windows/Manifest.rc)
+        target_sources(hypertext_test_response_parsing PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
-    target_link_libraries(hypertext_test_response_parsing PUBLIC hypertext)
+    target_link_libraries(hypertext_test_response_parsing PRIVATE hypertext)
     add_test(hypertext hypertext_test_response_parsing)
 
     project(hypertext_test_request_parsing C)
     add_executable(hypertext_test_request_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Request.c)
     if(MSVC)
-        target_sources(hypertext_test_request_parsing PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Sources/Windows/Manifest.rc)
+        target_sources(hypertext_test_request_parsing PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
-    target_link_libraries(hypertext_test_request_parsing PUBLIC hypertext)
+    target_link_libraries(hypertext_test_request_parsing PRIVATE hypertext)
     add_test(hypertext hypertext_test_request_parsing)
 endif()

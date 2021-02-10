@@ -66,7 +66,7 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
         {
             size_t old_value_length = strlen(i_fields[position].value);
             i_fields[position].value = realloc(i_fields[position].value, old_value_length + value_length + 3);
-            strncat(i_fields[position].value, ", ", 2);
+            strncat(i_fields[position].value, ", ", 3);
             strncat(i_fields[position].value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length);
         }
         else

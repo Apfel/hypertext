@@ -37,14 +37,14 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "apfel.github.io"
             VALUE "FileDescription", "hypertext"
-            VALUE "FileVersion", "1.0.0"
+            VALUE "FileVersion", "@hypertext_VERSION_MAJOR@.@hypertext_VERSION_MINOR@.@hypertext_VERSION_PATCH@"
             VALUE "InternalName", "hypertext"
             VALUE "LegalCopyright", "See LICENSE on the GitHub repository: https://github.com/Apfel/hypertext"
             VALUE "LegalTrademarks", ""
             VALUE "OriginalFilename", "hypertext"
             VALUE "PrivateBuild", ""
             VALUE "ProductName", "hypertext"
-            VALUE "ProductVersion", "1.0.0"
+            VALUE "ProductVersion", "@hypertext_VERSION_MAJOR@.@hypertext_VERSION_MINOR@.@hypertext_VERSION_PATCH@"
             VALUE "SpecialBuild", ""
         END
     END
