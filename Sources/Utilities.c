@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-inline int64_t hypertext_utilities_contains_item(hypertext_Header_Field* fields, size_t field_count, const char* name)
+static int64_t hypertext_utilities_contains_item(hypertext_Header_Field* fields, size_t field_count, const char* name)
 {
     if (fields != NULL && field_count >= 2 && name != NULL) for (size_t i = 0; i != field_count; i++) if (strcmp(fields[i].key, name) == 0) return i;
 
