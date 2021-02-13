@@ -95,6 +95,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
         instance->fields    = calloc(instance->field_count, sizeof(hypertext_Header_Field));
         body_offset         = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
     }
+    else instance->fields = NULL;
 
     if (length != 0)
     {
@@ -103,6 +104,7 @@ uint8_t hypertext_Parse_Request(hypertext_Instance* instance, const char* input,
         instance->body = calloc(length + 1, sizeof(char));
         memcpy(instance->body, hypertext_utilities_cut_text(input, padding + body_offset + 1, padding + body_offset + length), sizeof(char) * length);
     }
+    else instance->body = NULL;
 
     return hypertext_Result_Success;
 }
@@ -158,6 +160,7 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
         instance->fields = calloc(instance->field_count, sizeof(hypertext_Header_Field));
         body_offset = hypertext_utilities_parse_headers(hypertext_utilities_cut_text(input, padding, strlen(input)), instance->fields, &instance->field_count);
     }
+    else instance->fields = NULL;
 
     if (length != 0)
     {
@@ -166,6 +169,7 @@ uint8_t hypertext_Parse_Response(hypertext_Instance* instance, const char* input
         instance->body = calloc(length + 1, sizeof(char));
         memcpy(instance->body, hypertext_utilities_cut_text(input, padding + body_offset, padding + body_offset + length), length);
     }
+    else instance->fields = NULL;
 
     return hypertext_Result_Success;
 }
