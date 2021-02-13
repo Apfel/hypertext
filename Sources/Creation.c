@@ -45,6 +45,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
         instance->fields = calloc(field_count, sizeof(hypertext_Header_Field));
         memcpy(instance->fields, fields, sizeof(hypertext_Header_Field) * field_count);
     }
+    else instance->fields = NULL;
 
     if (body_length != 0)
     {
@@ -53,6 +54,7 @@ uint8_t hypertext_Create_Request(hypertext_Instance* instance, uint8_t method, c
         instance->body = calloc(body_length + 1, sizeof(char));
         memcpy(instance->body, body, body_length * sizeof(char));
     }
+    else instance->body = NULL;
 
     instance->version = version;
 
@@ -75,6 +77,7 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version,
         instance->fields        = calloc(field_count, sizeof(hypertext_Header_Field));
         memcpy(instance->fields, fields, sizeof(hypertext_Header_Field) * field_count);
     }
+    else instance->fields = NULL;
 
     if (body_length != 0)
     {
@@ -83,6 +86,7 @@ uint8_t hypertext_Create_Response(hypertext_Instance* instance, uint8_t version,
         instance->body = calloc(body_length + 1, sizeof(char));
         memcpy(instance->body, body, body_length * sizeof(char));
     }
+    else instance->body = NULL;
 
     instance->version = version;
 

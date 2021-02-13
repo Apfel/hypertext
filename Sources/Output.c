@@ -105,7 +105,7 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
 
         snprintf(out_str, out_len + 1, "%s%s", out_str, term);
 
-        if (instance->body != NULL) snprintf(out_str, out_len + 1, "%s%s", out_str, instance->body);
+        if (instance->body != NULL && strlen(instance->body) > 0) snprintf(out_str, out_len + 1, "%s%s", out_str, instance->body);
 
         memcpy(output, out_str, sizeof(char) * out_len);
 
