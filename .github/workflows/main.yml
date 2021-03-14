@@ -9,34 +9,41 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: ilammy/msvc-dev-cmd@v1
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}\\build
+      toolset: "10.0.18362.0"
 
     - name: Configure
       shell: bash
       working-directory: ${{runner.workspace}}\\build
       run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON
+      toolset: "10.0.18362.0"
 
     - name: Build (Debug)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
       run: cmake --build . --config Debug
+      toolset: "10.0.18362.0"
 
     - name: Test (Debug)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
-      run: cmake -E chdir build ctest -C Debug
+      run: ctest -C Debug
+      toolset: "10.0.18362.0"
 
     - name: Build (Release)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
       run: cmake --build . --config Release
+      toolset: "10.0.18362.0"
 
     - name: Test (Release)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
-      run: cmake -E chdir build ctest -C Release
+      run: ctest -C Release
+      toolset: "10.0.18362.0"
 
   build-linux:
     runs-on: ubuntu-latest
@@ -60,4 +67,4 @@ jobs:
     - name: Test
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: cmake -E chdir build ctest
+      run: ctest
