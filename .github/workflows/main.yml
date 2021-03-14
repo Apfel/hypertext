@@ -9,9 +9,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: ilammy/msvc-dev-cmd@v1
-      with:
-        toolset: "10.0.18362.0"
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}\\build
@@ -19,7 +16,7 @@ jobs:
     - name: Configure
       shell: bash
       working-directory: ${{runner.workspace}}\\build
-      run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON
+      run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON -DACTIONS_FIX=ON
 
     - name: Build (Debug)
       working-directory: ${{runner.workspace}}\\build

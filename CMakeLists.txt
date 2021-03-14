@@ -27,6 +27,7 @@ include(CMakePackageConfigHelpers)
 
 option(BUILD_SHARED "Builds hypertext as a shared library." OFF)
 option(BUILD_TESTS  "Builds tests for hypertext."           OFF)
+option(ACTIONS_FIX  "(Don't use this) Fix for GitHub's inability to let us change the Windows SDK version" OFF)
 
 if(BUILD_SHARED)
     message("-- > Building mode set to shared.")
@@ -72,6 +73,10 @@ if(MSVC)
         PRIVATE "/W4"
         PRIVATE "/WX"
     )
+
+    if(ACTIONS_FIX)
+        target_compile_options(hypertext PRIVATE "/wd5105")
+    endif()
 else()
     target_compile_options(hypertext
         PRIVATE "-Wall"
