@@ -64,8 +64,7 @@ endif()
 
 if(MSVC)
     target_compile_definitions(hypertext
-        PRIVATE "WIN32_LEAN_AND_MEAN"
-        PRIVATE "UNICODE"
+        PRIVATE "_UNICODE"
         PRIVATE "_CRT_SECURE_NO_WARNINGS"
     )
 
