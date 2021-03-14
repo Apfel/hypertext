@@ -18,7 +18,10 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 3.12.0)
-project(hypertext LANGUAGES C VERSION 1.0.4)
+project(hypertext LANGUAGES C VERSION 1.0.5)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(CMakePackageConfigHelpers)
 
@@ -105,7 +108,7 @@ if(BUILD_TESTS)
         target_sources(hypertext_test_response_creation PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
     target_link_libraries(hypertext_test_response_creation PRIVATE hypertext)
-    add_test(hypertext hypertext_test_response_creation)
+    add_test(NAME hypertext_test_response_creation COMMAND $<TARGET_FILE:hypertext_test_response_creation>)
 
     project(hypertext_test_request_creation C)
     add_executable(hypertext_test_request_creation ${CMAKE_CURRENT_LIST_DIR}/Tests/Creation/Request.c)
@@ -113,7 +116,7 @@ if(BUILD_TESTS)
         target_sources(hypertext_test_request_creation PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
     target_link_libraries(hypertext_test_request_creation PRIVATE hypertext)
-    add_test(hypertext hypertext_test_request_creation)
+    add_test(NAME hypertext_test_request_creation COMMAND $<TARGET_FILE:hypertext_test_request_creation>)
 
     project(hypertext_test_response_parsing C)
     add_executable(hypertext_test_response_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Response.c)
@@ -121,7 +124,7 @@ if(BUILD_TESTS)
         target_sources(hypertext_test_response_parsing PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
     target_link_libraries(hypertext_test_response_parsing PRIVATE hypertext)
-    add_test(hypertext hypertext_test_response_parsing)
+    add_test(NAME hypertext_test_response_parsing COMMAND $<TARGET_FILE:hypertext_test_response_parsing>)
 
     project(hypertext_test_request_parsing C)
     add_executable(hypertext_test_request_parsing ${CMAKE_CURRENT_LIST_DIR}/Tests/Parsing/Request.c)
@@ -129,5 +132,5 @@ if(BUILD_TESTS)
         target_sources(hypertext_test_request_parsing PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Manifest.rc)
     endif()
     target_link_libraries(hypertext_test_request_parsing PRIVATE hypertext)
-    add_test(hypertext hypertext_test_request_parsing)
+    add_test(NAME hypertext_test_request_parsing COMMAND $<TARGET_FILE:hypertext_test_request_parsing>)
 endif()

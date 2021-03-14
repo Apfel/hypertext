@@ -18,15 +18,25 @@ jobs:
       working-directory: ${{runner.workspace}}\\build
       run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON
 
-    - name: Build
+    - name: Build (Debug)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
-      run: cmake --build .
+      run: cmake --build . --config Debug
 
-    - name: Test
+    - name: Test (Debug)
       working-directory: ${{runner.workspace}}\\build
       shell: bash
-      run: ctest -C Debug
+      run: cmake -E chdir build ctest -C Debug
+
+    - name: Build (Release)
+      working-directory: ${{runner.workspace}}\\build
+      shell: bash
+      run: cmake --build . --config Release
+
+    - name: Test (Release)
+      working-directory: ${{runner.workspace}}\\build
+      shell: bash
+      run: cmake -E chdir build ctest -C Release
 
   build-linux:
     runs-on: ubuntu-latest
@@ -41,7 +51,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON
-      
+
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
@@ -50,4 +60,4 @@ jobs:
     - name: Test
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: ctest -C Debug
+      run: cmake -E chdir build ctest
