@@ -1,0 +1,53 @@
+
+name: CMake
+
+on: [push, pull_request]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}\\build
+
+    - name: Configure
+      shell: bash
+      working-directory: ${{runner.workspace}}\\build
+      run: cmake $GITHUB_WORKSPACE
+
+    - name: Build
+      working-directory: ${{runner.workspace}}\\build
+      shell: bash
+      run: cmake --build .
+
+    - name: Test
+      working-directory: ${{runner.workspace}}\\build
+      shell: bash
+      run: ctest -C Debug
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build .
+
+    - name: Test
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: ctest -C Debug
