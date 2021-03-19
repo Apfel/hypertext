@@ -81,10 +81,7 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
             strncpy(field.value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length);
 
             memcpy(&i_fields[count - 1], &field, sizeof(field));
-        }
-
-        if (position == -1)
-        {
+            
             count++;
             i_fields = realloc(i_fields, sizeof(hypertext_Header_Field) * count);
         }
