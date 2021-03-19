@@ -1,4 +1,6 @@
-# Copyright (c) 2020 Apfel
+# This file is part of the hypertext project.
+#
+# Copyright (c) 2020-2021 Apfel
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +20,7 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 3.12.0)
-project(hypertext LANGUAGES C VERSION 1.0.5)
+project(hypertext LANGUAGES C VERSION 1.0.6)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

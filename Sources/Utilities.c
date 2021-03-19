@@ -1,4 +1,6 @@
-// Copyright (c) 2020 Apfel
+// This file is part of the hypertext project.
+//
+// Copyright (c) 2020-2021 Apfel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +83,7 @@ size_t hypertext_utilities_parse_headers(const char* input, hypertext_Header_Fie
             strncpy(field.value, hypertext_utilities_cut_text(input, padding + key_length + value_padding, padding + key_length + value_padding + value_length), value_length);
 
             memcpy(&i_fields[count - 1], &field, sizeof(field));
-            
+
             count++;
             i_fields = realloc(i_fields, sizeof(hypertext_Header_Field) * count);
         }
