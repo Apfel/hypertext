@@ -17,7 +17,7 @@ jobs:
     - name: Configure
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake ${{runner.workspace}}/hypertext -DBUILD_SHARED=ON -DBUILD_TESTS=ON -DACTIONS_FIX=ON
+      run: cmake $GITHUB_WORKSPACE -DBUILD_SHARED=ON -DBUILD_TESTS=ON -DACTIONS_FIX=ON
 
     - name: Build (Debug)
       working-directory: ${{runner.workspace}}/build
@@ -44,7 +44,7 @@ jobs:
       with: 
         name: hypertext-windows-debug-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/hypertext/Include/hypertext.h
+          ${{runner.workspace}}/Include/hypertext.h
           ${{runner.workspace}}/build/Debug
     
     - name: Upload artifacts (Release)
@@ -52,7 +52,7 @@ jobs:
       with: 
         name: hypertext-windows-release-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/hypertext/Include/hypertext.h
+          ${{runner.workspace}}/Include/hypertext.h
           ${{runner.workspace}}/build/Release
 
   build-linux:
@@ -86,6 +86,6 @@ jobs:
       with: 
         name: hypertext-ubuntu-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/hypertext/Include/hypertext.h
+          ${{runner.workspace}}/Include/hypertext.h
           ${{runner.workspace}}/build/libhypertext.so
       
