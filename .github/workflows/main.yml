@@ -3,6 +3,20 @@ name: Main
 on: [push, pull_request]
 
 jobs:
+  header-upload:
+    name: Header upload
+    runs-on: windows-latest
+    
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    
+    - name: Upload headers
+      uses: actions/upload-artifact@v1.0.0
+      with: 
+        name: hypertext-headers-${{ github.run_number }}
+        path: ${{runner.workspace}}\hypertext\Includes\hypertext.h
+      
   build-windows:
     name: Windows
     runs-on: windows-latest
@@ -43,17 +57,13 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with: 
         name: hypertext-windows-debug-${{ github.run_number }}
-        path: |
-          ${{runner.workspace}}\hypertext\Includes\hypertext.h
-          ${{runner.workspace}}\build\Debug
+        path: ${{runner.workspace}}\build\Debug
     
     - name: Upload artifacts (Release)
       uses: actions/upload-artifact@v1.0.0
       with: 
         name: hypertext-windows-release-${{ github.run_number }}
-        path: |
-          ${{runner.workspace}}\hypertext\Includes\hypertext.h
-          ${{runner.workspace}}\build\Release
+        path: ${{runner.workspace}}\build\Release
 
   build-linux:
     name: Ubuntu
@@ -85,7 +95,5 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with: 
         name: hypertext-ubuntu-${{ github.run_number }}
-        path: |
-          ${{runner.workspace}}/hypertext/Includes/hypertext.h
-          ${{runner.workspace}}/build/libhypertext.so
+        path: ${{runner.workspace}}/build/libhypertext.so
       
