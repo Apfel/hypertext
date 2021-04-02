@@ -40,19 +40,19 @@ jobs:
       run: ctest -C Release
       
     - name: Upload artifacts (Debug)
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with: 
         name: hypertext-windows-debug-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/Include/hypertext.h
+          ${{runner.workspace}}/Include/*.h
           ${{runner.workspace}}/build/Debug
     
     - name: Upload artifacts (Release)
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with: 
         name: hypertext-windows-release-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/Include/hypertext.h
+          ${{runner.workspace}}/Include/*.h
           ${{runner.workspace}}/build/Release
 
   build-linux:
@@ -82,10 +82,11 @@ jobs:
       run: ctest
       
     - name: Upload artifacts
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with: 
         name: hypertext-ubuntu-${{ github.run_number }}
         path: |
-          ${{runner.workspace}}/Include/hypertext.h
+          ${{runner.workspace}}/Include/*.h
           ${{runner.workspace}}/build/libhypertext.so
-      
+          ${{runner.workspace}}/build/hypertext_test_*
+
