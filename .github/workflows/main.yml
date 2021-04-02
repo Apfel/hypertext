@@ -32,7 +32,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with: 
-        name: hypertext-windows-release-${{ github.run_number }}
+        name: hypertext-windows-${{ github.run_number }}
         if-no-files-found: error
         path: |
           ${{runner.workspace}}/Include/hypertext.h
