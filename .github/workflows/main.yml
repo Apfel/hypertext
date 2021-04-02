@@ -17,7 +17,7 @@ jobs:
     - name: Configure
       shell: bash
       working-directory: ${{runner.workspace}}\\build
-      run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON -DACTIONS_FIX=ON
+      run: cmake $GITHUB_WORKSPACE -DBUILD_SHARED=ON -DBUILD_TESTS=ON -DACTIONS_FIX=ON
 
     - name: Build (Debug)
       working-directory: ${{runner.workspace}}\\build
@@ -43,13 +43,17 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with: 
         name: hypertext-windows-debug-${{ github.run_number }}
-        path: ${{runner.workspace}}\\build\\Debug
+        path: |
+          ${{runner.workspace}}\\Includes\\hypertext.h
+          ${{runner.workspace}}\\build\\Debug
     
     - name: Upload artifacts (Release)
       uses: actions/upload-artifact@v1.0.0
       with: 
-        name: hypertext-windows-debug-${{ github.run_number }}
-        path: ${{runner.workspace}}\\build\\Release
+        name: hypertext-windows-release-${{ github.run_number }}
+        path: |
+          ${{runner.workspace}}\\Includes\\hypertext.h
+          ${{runner.workspace}}\\build\\Release
 
   build-linux:
     name: Ubuntu
@@ -65,7 +69,7 @@ jobs:
     - name: Configure
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DBUILD_TESTS=ON
+      run: cmake $GITHUB_WORKSPACE -DBUILD_SHARED=ON -DBUILD_TESTS=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
@@ -81,5 +85,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with: 
         name: hypertext-ubuntu-${{ github.run_number }}
-        path: ${{runner.workspace}}/build/libhypertext.so
+        path: |
+          ${{runner.workspace}}/Includes/hypertext.h
+          ${{runner.workspace}}/build/libhypertext.so
       
