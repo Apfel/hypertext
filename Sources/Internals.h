@@ -36,7 +36,7 @@ struct hypertext_Instance
     uint8_t                 version;
 };
 
-inline bool hypertext_utilities_is_valid_instance(hypertext_Instance* instance)
+inline static bool hypertext_utilities_is_valid_instance(hypertext_Instance* instance)
 {
     if (instance == NULL) return false;
     else if (instance->type == hypertext_Instance_Content_Type_Request || instance->type == hypertext_Instance_Content_Type_Response) return true;
