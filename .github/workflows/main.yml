@@ -1,16 +1,17 @@
-
-name: CMake
+name: Main
 
 on: [push, pull_request]
 
 jobs:
   build-windows:
+    name: Windows
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Clone repository
+      uses: actions/checkout@v2
 
-    - name: Create Build Environment
+    - name: Create build environment
       run: cmake -E make_directory ${{runner.workspace}}\\build
 
     - name: Configure
@@ -37,14 +38,28 @@ jobs:
       working-directory: ${{runner.workspace}}\\build
       shell: bash
       run: ctest -C Release
+      
+    - name: Upload artifacts (Debug)
+      uses: actions/upload-artifact@v1.0.0
+      with: 
+        name: hypertext-windows-debug-${{ github.run_number }}
+        path: ${{runner.workspace}}\\build\\Debug
+    
+    - name: Upload artifacts (Release)
+      uses: actions/upload-artifact@v1.0.0
+      with: 
+        name: hypertext-windows-debug-${{ github.run_number }}
+        path: ${{runner.workspace}}\\build\\Release
 
   build-linux:
+    name: Ubuntu
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Clone repository
+      uses: actions/checkout@v2
 
-    - name: Create Build Environment
+    - name: Create build environment
       run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Configure
@@ -61,3 +76,10 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       shell: bash
       run: ctest
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with: 
+        name: hypertext-ubuntu-${{ github.run_number }}
+        path: ${{runner.workspace}}/build/libhypertext.so
+      
