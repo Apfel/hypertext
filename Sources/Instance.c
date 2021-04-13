@@ -25,6 +25,12 @@
 
 #include <stdlib.h>
 
+static inline void hypertext_utilities_free_and_null(void* data)
+{
+    free(data);
+    data = NULL;
+}
+
 hypertext_Instance* hypertext_New()
 {
     hypertext_Instance* instance = calloc(1, sizeof(hypertext_Instance));
@@ -45,7 +51,7 @@ void hypertext_Destroy(hypertext_Instance* instance)
     instance->version       = 0;
     instance->type          = hypertext_Instance_Content_Type_Unknown;
 
-    if (instance->body      != NULL) free(instance->body);
-    if (instance->fields    != NULL) free(instance->fields);
-    if (instance->path      != NULL) free(instance->path);
+    if (instance->body      != NULL) hypertext_utilities_free_and_null(instance->body);
+    if (instance->fields    != NULL) hypertext_utilities_free_and_null(instance->fields);
+    if (instance->path      != NULL) hypertext_utilities_free_and_null(instance->path);
 }

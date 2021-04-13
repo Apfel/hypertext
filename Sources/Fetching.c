@@ -28,6 +28,7 @@
 uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
+    else if (output == NULL) hypertext_Result_Invalid_Parameters;
 
     memcpy(output, &instance->method, sizeof(uint8_t));
 
@@ -37,7 +38,7 @@ uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output)
 uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t* length)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
-    if (length == NULL) return hypertext_Result_Invalid_Parameters;
+    else if (length == NULL) return hypertext_Result_Invalid_Parameters;
 
     if (output == NULL)
     {
@@ -54,6 +55,7 @@ uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t*
 uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output)
 {
     if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
+    else if (output == NULL) hypertext_Result_Invalid_Parameters;
 
     memcpy(output, &instance->version, sizeof(uint8_t));
 
@@ -73,7 +75,7 @@ uint8_t hypertext_Fetch_Code(hypertext_Instance* instance, uint16_t* output)
 uint8_t hypertext_Fetch_Header_Field(hypertext_Instance* instance, hypertext_Header_Field* output, const char* key_name)
 {
     if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
-    else if (output == NULL || key_name == NULL) return hypertext_Result_Invalid_Parameters;
+    else if (output == NULL || key_name == NULL || strlen(key_name) == 0) return hypertext_Result_Invalid_Parameters;
 
     for (size_t i = 0; i != instance->field_count; i++) if (strcmp(instance->fields[i].key, key_name) == 0)
     {

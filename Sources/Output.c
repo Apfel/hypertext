@@ -71,7 +71,7 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
 
     size_t out_len = strlen(method_str) + strlen(instance->path) + (keep_compat ? 12 : 11);
 
-    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
+    if (instance->field_count != 0 || instance->fields != NULL) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
 
     out_len += keep_compat ? 2 : 1;
 
@@ -103,7 +103,7 @@ uint8_t hypertext_Output_Request(hypertext_Instance* instance, char* output, siz
 
         snprintf(out_str, out_len + 1, "%s %s HTTP/%s%s", method_str, instance->path, ver_str, term);
 
-        if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len + 1, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
+        if (instance->field_count != 0 && instance->fields != NULL) for (size_t i = 0; i != instance->field_count; i++) snprintf(out_str, out_len + 1, "%s%s:%s%s%s", out_str, instance->fields[i].key, keep_compat ? " " : "", instance->fields[i].value, term);
 
         snprintf(out_str, out_len + 1, "%s%s", out_str, term);
 
@@ -297,7 +297,7 @@ uint8_t hypertext_Output_Response(hypertext_Instance* instance, char* output, si
 
     size_t out_len = (keep_desc ? strlen(description) : 0) + 15 + (keep_compat ? 2 : 1);
 
-    if (instance->field_count != 0 && instance->fields != 0) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
+    if (instance->field_count != 0 && instance->fields != NULL) for (size_t i = 0; i != instance->field_count; i++) out_len += strlen(instance->fields[i].key) + strlen(instance->fields[i].value) + (keep_compat ? 4 : 2);
 
     out_len += keep_compat ? 2 : 1;
 
