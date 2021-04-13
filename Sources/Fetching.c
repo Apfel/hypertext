@@ -28,7 +28,7 @@
 uint8_t hypertext_Fetch_Method(hypertext_Instance* instance, uint8_t* output)
 {
     if (instance == NULL || instance->type != hypertext_Instance_Content_Type_Request) return hypertext_Result_Invalid_Instance;
-    else if (output == NULL) hypertext_Result_Invalid_Parameters;
+    else if (output == NULL) return hypertext_Result_Invalid_Parameters;
 
     memcpy(output, &instance->method, sizeof(uint8_t));
 
@@ -55,7 +55,7 @@ uint8_t hypertext_Fetch_Path(hypertext_Instance* instance, char* output, size_t*
 uint8_t hypertext_Fetch_Version(hypertext_Instance* instance, uint8_t* output)
 {
     if (!hypertext_utilities_is_valid_instance(instance)) return hypertext_Result_Invalid_Instance;
-    else if (output == NULL) hypertext_Result_Invalid_Parameters;
+    else if (output == NULL) return hypertext_Result_Invalid_Parameters;
 
     memcpy(output, &instance->version, sizeof(uint8_t));
 
