@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 3.12.0)
-project(hypertext LANGUAGES C VERSION 1.0.6)
+project(hypertext LANGUAGES C VERSION 1.0.7)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
